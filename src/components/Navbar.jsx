@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -12,24 +14,38 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const toggleMenu = () => setIsActive(!isActive);
+  const closeMenu = () => setIsActive(false);
+
   return (
-    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''} ${isActive ? 'active' : ''}`}>
       <div className="container nav-content">
-        <a href="/" className="logo">
-          <img src="/academy-logo-transparent.png" alt="Lions Flame" className="nav-logo-img" />
+        <Link to="/" className="logo" onClick={closeMenu}>
+          <img src="academy-logo-transparent.png" alt="Lions Flame" className="nav-logo-img" />
           <div className="logo-text">
             LION'S FLAME
             <span>SOCCER ACADEMY</span>
           </div>
-        </a>
-        <ul className="nav-links">
-          <li><a href="/#home">Home</a></li>
-          <li><a href="/#about">Head Coach</a></li>
-          <li><a href="/#programs">Programs</a></li>
-          <li><a href="/#gallery">Gallery</a></li>
-          <li><a href="/#testimonials">Stories</a></li>
-        </ul>
-        <a href="/#contact" className="btn-primary">Contact us!</a>
+        </Link>
+
+        <div className={`nav-menu ${isActive ? 'active' : ''}`}>
+          <ul className="nav-links">
+            <li><Link to="/#home" onClick={closeMenu}>Home</Link></li>
+            <li><Link to="/#about" onClick={closeMenu}>Head Coach</Link></li>
+            <li><Link to="/#programs" onClick={closeMenu}>Programs</Link></li>
+            <li><Link to="/#gallery" onClick={closeMenu}>Gallery</Link></li>
+            <li><Link to="/#testimonials" onClick={closeMenu}>Stories</Link></li>
+          </ul>
+          <Link to="/#contact" className="btn-primary mobile-btn" onClick={closeMenu}>Contact us!</Link>
+        </div>
+
+        <button className={`hamburger ${isActive ? 'active' : ''}`} onClick={toggleMenu} aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <Link to="/#contact" className="btn-primary desktop-btn">Contact us!</Link>
       </div>
     </nav>
   );

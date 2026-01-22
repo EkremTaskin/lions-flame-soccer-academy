@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import './Gallery.css';
 
 const galleryData = [
-    { id: 1, src: '/gallery_1.png', alt: 'Intense Match Action', category: 'Match' },
-    { id: 2, src: '/gallery_2.png', alt: 'Precision Drills', category: 'Training' },
-    { id: 3, src: '/gallery_3.png', alt: 'Team Spirit', category: 'Team' },
-    { id: 4, src: '/gallery_4.png', alt: 'Expert Coaching', category: 'Coaching' }
+    { id: 1, src: 'gallery_1.png', alt: 'Intense Match Action', category: 'Match' },
+    { id: 2, src: 'gallery_2.png', alt: 'Precision Drills', category: 'Training' },
+    { id: 3, src: 'gallery_3.png', alt: 'Team Spirit', category: 'Team' },
+    { id: 4, src: 'gallery_4.png', alt: 'Expert Coaching', category: 'Coaching' }
 ];
 
 const Gallery = () => {
@@ -15,7 +15,7 @@ const Gallery = () => {
         <section id="gallery" className="gallery-section">
             <div className="container">
                 <div className="section-header text-center">
-                    <h2 className="section-title">Academy <span className="text-secondary">Gallery</span></h2>
+                    <h2 className="section-title">Academy <span className="text-primary">Gallery</span></h2>
                     <p className="section-subtitle">Moments of passion, dedication, and triumph.</p>
                 </div>
 

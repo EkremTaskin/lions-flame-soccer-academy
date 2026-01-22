@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import './BookingPage.css';
 
@@ -68,7 +68,7 @@ const BookingPage = () => {
                                 <p><strong>Date:</strong> {selectedDate}</p>
                                 <p><strong>Time:</strong> {selectedTime}</p>
                             </div>
-                            <a href="/" className="btn-primary mt-4 inline-block">Return Home</a>
+                            <Link to="/" className="btn-primary mt-4 inline-block">Return Home</Link>
                         </div>
                     ) : (
                         <>

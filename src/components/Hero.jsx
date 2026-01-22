@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import './Hero.css';
 
@@ -41,7 +42,7 @@ const Hero = () => {
                     Ignite your passion and master the game at Lion's Flame Academy.
                 </p>
                 <div className="hero-buttons" ref={buttonsRef}>
-                    <a href="/book" className="btn-primary">Book a Trial</a>
+                    <Link to="/book" className="btn-primary">Book a Trial</Link>
                     <a href="#programs" className="btn-outline">View Programs</a>
                 </div>
             </div>

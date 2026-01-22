@@ -1,4 +1,5 @@
 import React from 'react';
+import coachImg from '../assets/coach_marcus_about_1769099856502.png';
 import './About.css';
 
 const About = () => {
@@ -6,7 +7,7 @@ const About = () => {
         <section id="about" className="about-section">
             <div className="container about-container">
                 <div className="about-image-wrapper">
-                    <img src="/coach-img.png" alt="Head Coach Marcus Sterling" className="about-image" />
+                    <img src={coachImg} alt="Head Coach Marcus Sterling" className="about-image" />
                 </div>
                 <div className="about-text">
                     <h2 className="section-title">Meet Our <span className="text-primary">Head Coach</span></h2>
@@ -24,14 +25,6 @@ const About = () => {
                         <li>
                             <h3 className="text-primary">UEFA A</h3>
                             <span>Licensed</span>
-                        </li>
-                        <li>
-                            <h3 className="text-primary">15+</h3>
-                            <span>Years Exp</span>
-                        </li>
-                        <li>
-                            <h3 className="text-primary">Pro</h3>
-                            <span>Background</span>
                         </li>
                     </ul>
                 </div>

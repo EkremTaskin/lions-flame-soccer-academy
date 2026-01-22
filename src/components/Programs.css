@@ -39,14 +39,27 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.card-header {
-    padding: 2rem;
-    background: #fafafa;
-    border-bottom: 1px solid #eee;
+.card-image {
     position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.program-card:hover .card-image img {
+    transform: scale(1.1);
 }
 
 .program-level {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
     background: var(--primary);
     color: white;
     padding: 0.25rem 0.75rem;
@@ -54,8 +67,6 @@
     font-size: 0.75rem;
     text-transform: uppercase;
     font-weight: 700;
-    display: inline-block;
-    margin-bottom: 1rem;
 }
 
 .program-title {
@@ -118,4 +129,19 @@
     background: var(--primary);
     border-color: var(--primary);
     color: white;
+}
+
+@media (max-width: 768px) {
+    .programs-section {
+        padding: 5rem 0;
+    }
+
+    .program-title {
+        font-size: 1.4rem;
+    }
+
+    .card-header,
+    .card-body {
+        padding: 1.5rem;
+    }
 }

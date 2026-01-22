@@ -15,7 +15,7 @@ const Contact = () => {
                         <div className="info-card">
                             <span className="icon">📍</span>
                             <h3>Our Academy</h3>
-                            <p>123 Victory Lane, Sportsville, CA 90210</p>
+                            <p>Location: Coming Soon</p>
                         </div>
 
                         <div className="info-card">
@@ -38,7 +38,6 @@ const Contact = () => {
                         <div className="social-links">
                             <a href="#" className="social-icon">Instagram</a>
                             <a href="#" className="social-icon">Facebook</a>
-                            <a href="#" className="social-icon">Twitter / X</a>
                         </div>
                     </div>
                 </div>
@@ -48,10 +47,10 @@ const Contact = () => {
                 <div className="container footer-grid">
                     <div className="footer-col brand-col">
                         <div className="footer-logo">
-                            <img src="/academy-logo-transparent.png" alt="Lions Flame" className="footer-logo-img" style={{ height: '80px' }} />
-                            <div className="footer-logo-text">
-                                LION'S FLAME
-                                <span>SOCCER ACADEMY</span>
+                            <img src="academy-logo-transparent.png" alt="Lions Flame" className="footer-logo-img" style={{ height: '80px' }} />
+                            <div className="footer-logo-text" style={{ display: 'flex', flexDirection: 'column' }}>
+                                <span className="footer-brand-name" style={{ fontWeight: 'bold', fontSize: '1.4rem' }}>LION'S FLAME</span>
+                                <span className="footer-brand-sub" style={{ color: 'var(--primary)', letterSpacing: '2px', fontSize: '0.8rem' }}>SOCCER ACADEMY</span>
                             </div>
                         </div>
                         <p className="footer-tagline">Igniting the next generation of football stars through elite coaching and character development.</p>
@@ -81,7 +80,7 @@ const Contact = () => {
                     <div className="footer-col">
                         <h3>Contact Us</h3>
                         <ul className="footer-contact-list">
-                            <li><span>📍</span> 123 Victory Lane, Sportsville</li>
+                            <li><span>📍</span> Location: Coming Soon</li>
                             <li><span>📞</span> +1 (555) 123-4567</li>
                             <li><span>✉️</span> info@lionsflame.academy</li>
                         </ul>
