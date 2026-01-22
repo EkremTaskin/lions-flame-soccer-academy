@@ -30,6 +30,16 @@ const Hero = () => {
 
     return (
         <section id="home" className="hero">
+            <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="hero-video"
+            >
+                <source src={`${import.meta.env.BASE_URL}hero-video.mp4`} type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
             <div className="hero-overlay"></div>
             <div className="container hero-content">
                 <h1 className="hero-title" ref={titleRef}>

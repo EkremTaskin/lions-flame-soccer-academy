@@ -1,12 +1,22 @@
 .hero {
     height: 100vh;
     width: 100%;
-    background-image: url('../assets/hero_coach_single_1769098577108.png');
-    background-size: cover;
-    background-position: center;
     position: relative;
     display: flex;
     align-items: center;
+    overflow: hidden;
+    background-color: #000;
+    /* Fallback color */
+}
+
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    object-fit: cover;
 }
 
 .hero-overlay {
@@ -15,9 +25,10 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to right,
-            var(--bg-main) 0%,
-            var(--overlay) 50%,
+    /* Darker overlay for better contrast with white text */
+    background: linear-gradient(135deg,
+            rgba(0, 0, 0, 0.7) 0%,
+            rgba(0, 0, 0, 0.4) 50%,
             transparent 100%);
     z-index: 1;
 }
@@ -36,7 +47,7 @@
     margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
-    color: var(--text-main);
+    color: #ffffff;
 }
 
 .hero-title span {
@@ -45,13 +56,13 @@
 
 .text-stroke {
     color: transparent;
-    -webkit-text-stroke: 1.5px var(--text-main);
+    -webkit-text-stroke: 1.5px #ffffff;
 }
 
 .hero-subtitle {
     font-size: 1.2rem;
     max-width: 600px;
-    color: var(--text-muted);
+    color: #eeeeee;
     margin-bottom: 3rem;
     font-weight: 500;
 }
@@ -62,8 +73,8 @@
 }
 
 .btn-outline {
-    border: 2px solid var(--text-main);
-    color: var(--text-main);
+    border: 2px solid #ffffff;
+    color: #ffffff;
     padding: 0.75rem 2rem;
     border-radius: 50px;
     font-weight: 600;
@@ -73,8 +84,8 @@
 }
 
 .btn-outline:hover {
-    background-color: var(--text-main);
-    color: var(--bg-main);
+    background-color: #121212;
+    color: #ffffff;
 }
 
 @media (max-width: 968px) {

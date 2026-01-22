@@ -10,9 +10,9 @@
 }
 
 .navbar.scrolled {
-    background: var(--bg-main);
+    background: black;
     padding: 1rem 0;
-    box-shadow: var(--shadow);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .nav-content {
@@ -52,8 +52,8 @@
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--text-main);
-    opacity: 0.8;
+    color: #ffffff;
+    opacity: 1;
     transition: color 0.3s ease, opacity 0.3s ease;
 }
 
@@ -62,8 +62,9 @@
 }
 
 .btn-primary {
-    background-color: var(--primary);
-    color: white;
+    background-color: white;
+    /* Default white */
+    color: black;
     padding: 0.75rem 1.5rem;
     border-radius: 50px;
     font-weight: 600;
@@ -85,12 +86,6 @@
     display: none;
 }
 
-.nav-actions {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
 .hamburger {
     display: none;
     flex-direction: column;
@@ -107,7 +102,7 @@
 .hamburger span {
     width: 30px;
     height: 3px;
-    background: var(--text-main);
+    background: white;
     border-radius: 10px;
     transition: all 0.3s linear;
     position: relative;
@@ -146,7 +141,7 @@
         right: -100%;
         width: 80%;
         height: 100vh;
-        background: var(--bg-main);
+        background: black;
         display: flex;
         flex-direction: column;
         justify-content: center;

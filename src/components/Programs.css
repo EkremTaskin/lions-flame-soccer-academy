@@ -1,6 +1,6 @@
 .programs-section {
     padding: 8rem 0;
-    background-color: var(--bg-accent);
+    background-color: var(--dark-accent);
 }
 
 .text-center {
@@ -12,7 +12,7 @@
 }
 
 .section-subtitle {
-    color: var(--text-muted);
+    color: var(--gray);
     margin-top: 1rem;
     font-size: 1.1rem;
 }
@@ -24,13 +24,13 @@
 }
 
 .program-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    background: white;
+    border: 1px solid #ddd;
     border-radius: 15px;
     overflow: hidden;
     transition: transform 0.3s ease, border-color 0.3s ease;
     position: relative;
-    box-shadow: var(--shadow);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .program-card:hover {
@@ -72,7 +72,7 @@
 .program-title {
     font-size: 1.75rem;
     margin-bottom: 0.5rem;
-    color: var(--text-main);
+    color: #121212;
 }
 
 .program-age {
@@ -86,7 +86,7 @@
 }
 
 .card-body p {
-    color: var(--text-muted);
+    color: var(--gray);
     margin-bottom: 2rem;
     font-size: 0.95rem;
 }
@@ -97,11 +97,10 @@
 }
 
 .program-features li {
-    color: var(--text-main);
+    color: #333;
     margin-bottom: 0.75rem;
     padding-left: 1.5rem;
     position: relative;
-    opacity: 0.9;
 }
 
 .program-features li::before {
@@ -118,8 +117,8 @@
     text-align: center;
     padding: 1rem;
     background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-main);
+    border: 1px solid #ddd;
+    color: #121212;
     text-transform: uppercase;
     font-weight: 600;
     border-radius: 8px;
