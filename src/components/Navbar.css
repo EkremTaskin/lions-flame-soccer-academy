@@ -1,0 +1,105 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    background: var(--nav-bg);
+}
+
+.navbar.scrolled {
+    background: black;
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.nav-logo-img {
+    height: 80px;
+    /* Increased from 60px */
+    width: auto;
+    transition: transform 0.3s ease;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+    color: white;
+    font-family: var(--font-head);
+    line-height: 1.1;
+    font-size: 1.8rem;
+    /* Set specific larger font size */
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.logo-text span {
+    font-size: 0.9rem;
+    /* Increased from 0.7rem */
+    color: var(--secondary);
+    letter-spacing: 2px;
+    font-weight: 400;
+}
+
+.logo:hover .nav-logo-img {
+    transform: scale(1.05);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+}
+
+.nav-links a {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    /* Default white */
+    opacity: 0.9;
+    transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+    /* Orange on hover */
+    opacity: 1;
+}
+
+.btn-primary {
+    background-color: white;
+    /* Default white */
+    color: black;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary);
+    /* Orange on hover */
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
+}

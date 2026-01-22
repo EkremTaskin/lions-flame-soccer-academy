@@ -1,0 +1,284 @@
+.booking-page {
+    padding-top: 120px;
+    padding-bottom: 8rem;
+    background-color: #f9f9f9;
+    /* Light gray background for contrast with cards */
+    min-height: 100vh;
+}
+
+.booking-container {
+    max-width: 1000px;
+}
+
+.booking-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.booking-header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #121212;
+}
+
+.booking-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.booking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    align-items: start;
+}
+
+.booking-step {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
+    transition: all 0.3s ease;
+}
+
+.booking-step.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(1);
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.step-num {
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.step-header h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: #121212;
+}
+
+/* Program Selection */
+.program-select-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.program-select-btn {
+    padding: 1.5rem;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    background: white;
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    color: #121212;
+    transition: all 0.3s ease;
+    text-align: left;
+    cursor: pointer;
+}
+
+.program-select-btn:hover {
+    border-color: var(--primary);
+}
+
+.program-select-btn.selected {
+    border-color: var(--primary);
+    background: var(--dark-accent);
+}
+
+.selected-tag {
+    background: #f0f0f0;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.change-btn {
+    background: none;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: #121212;
+    font-size: 0.9rem;
+}
+
+.date-input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    color: #121212;
+    font-family: var(--font-body);
+}
+
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.75rem;
+}
+
+.slot-btn {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    color: #121212;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.slot-btn:hover {
+    border-color: var(--primary);
+}
+
+.slot-btn.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Payment Form */
+.payment-form input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    color: #121212;
+    font-size: 1rem;
+}
+
+.payment-form input::placeholder {
+    color: #aaa;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+/* Summary Card */
+.summary-card {
+    background: #fdfdfd;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px dashed #ddd;
+    margin-bottom: 2rem;
+}
+
+.summary-card h3 {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.summary-row.total {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+    font-weight: 700;
+    color: #121212;
+    font-size: 1.2rem;
+}
+
+.btn-text {
+    background: none;
+    color: #888;
+    width: 100%;
+    margin-top: 1rem;
+    font-weight: 500;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Success State */
+.booking-success {
+    background: white;
+    padding: 5rem;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+.success-icon {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+}
+
+.confirmation-details {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: #f9f9f9;
+    border-radius: 15px;
+    text-align: left;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.confirmation-details p {
+    margin-bottom: 0.5rem;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+@media (max-width: 768px) {
+    .booking-grid {
+        grid-template-columns: 1fr;
+    }
+}

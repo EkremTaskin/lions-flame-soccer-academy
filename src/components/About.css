@@ -1,0 +1,92 @@
+.about-section {
+    padding: 8rem 0;
+    background-color: white;
+}
+
+.about-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.about-image {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 8px solid #f9f9f9;
+    transition: transform 0.3s ease;
+}
+
+.about-image:hover {
+    transform: scale(1.02);
+}
+
+.section-title {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    line-height: 1.2;
+    color: #121212;
+}
+
+.about-text p {
+    font-size: 1.1rem;
+    color: #444;
+    margin-bottom: 2rem;
+}
+
+.coach-info {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: #f9f9f9;
+    border-left: 5px solid var(--primary);
+    border-radius: 0 15px 15px 0;
+}
+
+.coach-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    color: #121212;
+}
+
+.coach-title {
+    color: var(--primary) !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem !important;
+    margin-bottom: 1rem !important;
+}
+
+.coach-bio {
+    font-size: 1rem !important;
+    color: #555 !important;
+    margin-bottom: 0 !important;
+}
+
+.stats-grid {
+    display: flex;
+    gap: 3rem;
+    list-style: none;
+}
+
+.stats-grid li h3 {
+    font-family: var(--font-head);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.stats-grid li span {
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    color: #888;
+}
+
+@media (max-width: 968px) {
+    .about-container {
+        grid-template-columns: 1fr;
+    }
+}
