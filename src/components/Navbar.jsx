@@ -18,6 +18,19 @@ const Navbar = () => {
   const toggleMenu = () => setIsActive(!isActive);
   const closeMenu = () => setIsActive(false);
 
+  const handleLinkClick = (e, targetId) => {
+    closeMenu();
+    // If we're already on the home page, handle scroll manually
+    if (window.location.pathname === '/' || window.location.pathname === '/lions-flame-soccer-academy/') {
+      const element = document.getElementById(targetId.replace('#', ''));
+      if (element) {
+        e.preventDefault();
+        element.scrollIntoView({ behavior: 'smooth' });
+        window.history.pushState(null, null, targetId);
+      }
+    }
+  };
+
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''} ${isActive ? 'active' : ''}`}>
       <div className="container nav-content">
@@ -27,13 +40,13 @@ const Navbar = () => {
 
         <div className={`nav-menu ${isActive ? 'active' : ''}`}>
           <ul className="nav-links">
-            <li><Link to="/#home" onClick={closeMenu}>Home</Link></li>
-            <li><Link to="/#about" onClick={closeMenu}>Head Coach</Link></li>
-            <li><Link to="/#programs" onClick={closeMenu}>Programs</Link></li>
-            <li><Link to="/#gallery" onClick={closeMenu}>Gallery</Link></li>
-            <li><Link to="/#testimonials" onClick={closeMenu}>Stories</Link></li>
+            <li><Link to="#home" onClick={(e) => handleLinkClick(e, '#home')}>Home</Link></li>
+            <li><Link to="#about" onClick={(e) => handleLinkClick(e, '#about')}>Head Coach</Link></li>
+            <li><Link to="#programs" onClick={(e) => handleLinkClick(e, '#programs')}>Programs</Link></li>
+            <li><Link to="#gallery" onClick={(e) => handleLinkClick(e, '#gallery')}>Gallery</Link></li>
+            <li><Link to="#testimonials" onClick={(e) => handleLinkClick(e, '#testimonials')}>Stories</Link></li>
           </ul>
-          <Link to="/#contact" className="btn-primary mobile-btn" onClick={closeMenu}>Contact us!</Link>
+          <Link to="#contact" className="btn-primary mobile-btn" onClick={(e) => handleLinkClick(e, '#contact')}>Contact us!</Link>
         </div>
 
         <button className={`hamburger ${isActive ? 'active' : ''}`} onClick={toggleMenu} aria-label="Menu">
@@ -42,7 +55,7 @@ const Navbar = () => {
           <span></span>
         </button>
 
-        <Link to="/#contact" className="btn-primary desktop-btn">Contact us!</Link>
+        <Link to="#contact" className="btn-primary desktop-btn" onClick={(e) => handleLinkClick(e, '#contact')}>Contact us!</Link>
       </div>
     </nav>
   );
