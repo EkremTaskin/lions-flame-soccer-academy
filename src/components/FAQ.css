@@ -1,6 +1,6 @@
 .faq-section {
     padding: 8rem 0;
-    background-color: white;
+    background-color: var(--bg-main);
 }
 
 .faq-container {
@@ -9,7 +9,7 @@
 }
 
 .faq-item {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-color);
     margin-bottom: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -27,7 +27,7 @@
     font-size: 1.15rem;
     margin: 0;
     text-transform: none;
-    color: #121212;
+    color: var(--text-main);
     font-family: var(--font-body);
     font-weight: 600;
 }
@@ -44,7 +44,7 @@
     max-height: 0;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    background-color: #fafafa;
+    background-color: var(--bg-accent);
     border-radius: 8px;
 }
 
@@ -55,7 +55,7 @@
 }
 
 .faq-answer p {
-    color: #666;
+    color: var(--text-muted);
     line-height: 1.7;
     margin: 0;
     font-size: 0.95rem;

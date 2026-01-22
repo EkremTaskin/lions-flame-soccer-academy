@@ -1,6 +1,6 @@
 .testimonials-section {
     padding: 8rem 0;
-    background-color: var(--dark-accent);
+    background-color: var(--bg-accent);
 }
 
 .testimonials-grid {
@@ -10,11 +10,11 @@
 }
 
 .testimonial-card {
-    background: white;
+    background: var(--bg-card);
     padding: 3rem;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    border: 1px solid #eee;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
     transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -33,7 +33,7 @@
 
 .testimonial-content {
     font-style: italic;
-    color: #555;
+    color: var(--text-muted);
     font-size: 1.1rem;
     line-height: 1.7;
     margin-bottom: 2rem;
@@ -43,7 +43,7 @@
 .testimonial-author h4 {
     margin: 0;
     font-size: 1.1rem;
-    color: #121212;
+    color: var(--text-main);
 }
 
 .testimonial-author span {

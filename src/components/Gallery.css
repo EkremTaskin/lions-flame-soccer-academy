@@ -1,6 +1,6 @@
 .gallery-section {
     padding: 8rem 0;
-    background-color: white;
+    background-color: var(--bg-main);
 }
 
 .gallery-grid {

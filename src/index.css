@@ -1,20 +1,34 @@
 :root {
+  /* Common */
   --primary: #c5a022;
   --primary-hover: #b38f1f;
-  --secondary: #ffffff;
-  --dark: #ffffff;
-  /* Changed to white */
-  --dark-accent: #f5f5f5;
-  /* Changed to light gray */
-  --light: #121212;
-  /* Changed to dark for text */
-  --gray: #555555;
-  --overlay: rgba(255, 255, 255, 0.9);
   --font-head: 'Syne', sans-serif;
   --font-body: 'Inter', sans-serif;
-  --nav-bg: #121212;
-  /* Navbar background remains black */
+
+  /* Light Theme (Default) */
+  --bg-main: #ffffff;
+  --bg-accent: #f8f9fa;
+  --bg-card: #ffffff;
+  --text-main: #121212;
+  --text-muted: #555555;
+  --nav-bg: rgba(255, 255, 255, 0.9);
+  --nav-text: #121212;
+  --border-color: #eeeeee;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --overlay: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme='dark'] {
+  --bg-main: #0a0a0a;
+  --bg-accent: #111111;
+  --bg-card: #1a1a1a;
+  --text-main: #ffffff;
+  --text-muted: #aaaaaa;
+  --nav-bg: rgba(10, 10, 10, 0.9);
   --nav-text: #ffffff;
+  --border-color: #2a2a2a;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --overlay: rgba(0, 0, 0, 0.85);
 }
 
 * {
@@ -25,10 +39,11 @@
 
 body {
   font-family: var(--font-body);
-  background-color: var(--dark);
-  color: var(--light);
+  background-color: var(--bg-main);
+  color: var(--text-main);
   overflow-x: hidden;
   line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1,
@@ -40,7 +55,7 @@ h6 {
   font-family: var(--font-head);
   text-transform: uppercase;
   font-weight: 700;
-  color: var(--light);
+  color: var(--text-main);
 }
 
 a {
@@ -78,7 +93,7 @@ img {
 }
 
 .bg-dark {
-  background-color: var(--dark);
+  background-color: var(--bg-accent);
 }
 
 .uppercase {
@@ -91,7 +106,7 @@ img {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--dark);
+  background: var(--bg-main);
 }
 
 ::-webkit-scrollbar-thumb {
