@@ -1,4 +1,4 @@
-import React from 'react';
+import logo from '../assets/lions-flame-logo.png';
 import './Contact.css';
 
 const Contact = () => {
@@ -47,11 +47,7 @@ const Contact = () => {
                 <div className="container footer-grid">
                     <div className="footer-col brand-col">
                         <div className="footer-logo">
-                            <img src="academy-logo-transparent.png" alt="Lions Flame" className="footer-logo-img" style={{ height: '80px' }} />
-                            <div className="footer-logo-text" style={{ display: 'flex', flexDirection: 'column' }}>
-                                <span className="footer-brand-name" style={{ fontWeight: 'bold', fontSize: '1.4rem' }}>LION'S FLAME</span>
-                                <span className="footer-brand-sub" style={{ color: 'var(--primary)', letterSpacing: '2px', fontSize: '0.8rem' }}>SOCCER ACADEMY</span>
-                            </div>
+                            <img src={logo} alt="Lions Flame Soccer Academy" className="footer-logo-img" style={{ height: '70px', marginBottom: '1rem' }} />
                         </div>
                         <p className="footer-tagline">Igniting the next generation of football stars through elite coaching and character development.</p>
                     </div>

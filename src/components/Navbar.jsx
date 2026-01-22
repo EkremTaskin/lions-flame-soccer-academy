@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import logo from '../assets/lions-flame-logo.png';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -21,11 +22,7 @@ const Navbar = () => {
     <nav className={`navbar ${scrolled ? 'scrolled' : ''} ${isActive ? 'active' : ''}`}>
       <div className="container nav-content">
         <Link to="/" className="logo" onClick={closeMenu}>
-          <img src="academy-logo-transparent.png" alt="Lions Flame" className="nav-logo-img" />
-          <div className="logo-text">
-            LION'S FLAME
-            <span>SOCCER ACADEMY</span>
-          </div>
+          <img src={logo} alt="Lions Flame Soccer Academy" className="nav-logo-img" />
         </Link>
 
         <div className={`nav-menu ${isActive ? 'active' : ''}`}>

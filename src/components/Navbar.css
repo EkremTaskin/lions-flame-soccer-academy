@@ -28,30 +28,13 @@
 }
 
 .nav-logo-img {
-    height: 80px;
-    /* Increased from 60px */
+    height: 70px;
     width: auto;
     transition: transform 0.3s ease;
+    display: block;
 }
 
-.logo-text {
-    display: flex;
-    flex-direction: column;
-    margin-left: 15px;
-    color: white;
-    font-family: var(--font-head);
-    line-height: 1;
-    font-size: 1.8rem;
-    font-weight: 700;
-}
-
-.logo-text span {
-    font-size: 0.75rem;
-    color: var(--secondary);
-    letter-spacing: 0.39em;
-    font-weight: 400;
-    margin-top: -2px;
-}
+/* .logo-text styles removed as logo now contains text */
 
 .logo:hover .nav-logo-img {
     transform: scale(1.05);
@@ -133,15 +116,7 @@
     }
 
     .nav-logo-img {
-        height: 60px;
-    }
-
-    .logo-text {
-        font-size: 1.4rem;
-    }
-
-    .logo-text span {
-        font-size: 0.7rem;
+        height: 50px;
     }
 
     .hamburger {
