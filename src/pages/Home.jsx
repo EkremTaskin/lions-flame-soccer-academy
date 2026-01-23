@@ -11,6 +11,8 @@ import FAQ from '../components/FAQ';
 import Contact from '../components/Contact';
 import ParticleBackground from '../components/ParticleBackground';
 
+import InstagramFeed from '../components/InstagramFeed';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
@@ -19,7 +21,7 @@ const Home = () => {
     useEffect(() => {
         const ctx = gsap.context(() => {
             // -- GENERAL SECTION REVEALS --
-            const sections = document.querySelectorAll('section');
+            const sections = document.querySelectorAll('section, .instagram-section');
             sections.forEach(section => {
                 gsap.fromTo(section,
                     { opacity: 0, y: 50 },
@@ -38,7 +40,7 @@ const Home = () => {
             });
 
             // -- SPECIFIC STAGGER FOR CARDS --
-            const cards = document.querySelectorAll('.program-card, .testimonial-card, .gallery-item');
+            const cards = document.querySelectorAll('.program-card, .testimonial-card, .gallery-item, .instagram-item');
             gsap.fromTo(cards,
                 { opacity: 0, scale: 0.9, y: 30 },
                 {
@@ -113,6 +115,7 @@ const Home = () => {
             <Gallery />
             <Testimonials />
             <FAQ />
+            <InstagramFeed />
             <Contact />
         </div>
     );
