@@ -173,6 +173,35 @@
     border-color: var(--primary);
 }
 
+.duration-select {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.duration-btn {
+    padding: 1rem;
+    background: white;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.duration-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.duration-btn.selected {
+    border-color: var(--primary);
+    background: rgba(255, 87, 34, 0.05);
+    /* Assuming primary is #ff5722 */
+    color: var(--primary);
+}
+
 /* Payment Form */
 .payment-form input {
     width: 100%;

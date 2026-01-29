@@ -1,5 +1,5 @@
 import React from 'react';
-import coachImg from '../assets/coach_marcus_about_1769099856502.png';
+import coachImg from '../assets/coach_new.jpg';
 import './About.css';
 
 const About = () => {
@@ -15,15 +15,19 @@ const About = () => {
                         Lion's Flame Academy is led by a dedicated professional committed to technical excellence and player growth.
                     </p>
                     <div className="coach-info">
-                        <h3>Coach Marcus Sterling</h3>
+                        <h3>Coach Caglayan Asim Saglik</h3>
                         <p className="coach-title">Head of Player Development</p>
                         <p className="coach-bio">
-                            With over 15 years of experience in youth elite training, Coach Marcus focuses on building high-performance mindsets and tactical discipline. His approach combines professional rigor with a passion for mentoring the next generation of football stars.
+                            Caglayan Asim Saglik is a certified US Soccer D License coach with extensive experience in youth player development.
+                            Passionate about fostering technical skills, game understanding, and teamwork,
+                            he creates a positive and engaging environment for players of all ages. Dedicated to
+                            helping young athletes reach their full potential, Caglayan combines proven coaching methods
+                            with a love for the game to inspire growth both on and off the field.
                         </p>
                     </div>
                     <ul className="stats-grid">
                         <li>
-                            <h3 className="text-primary">UEFA A</h3>
+                            <h3 className="text-primary">USSF D</h3>
                             <span>Licensed</span>
                         </li>
                     </ul>

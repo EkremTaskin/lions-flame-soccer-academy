@@ -9,12 +9,20 @@ const BookingPage = () => {
     const initialProgram = queryParams.get('program') || '';
 
     const [selectedProgram, setSelectedProgram] = useState(initialProgram);
+    const [selectedDuration, setSelectedDuration] = useState('45'); // '45' or '90'
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
     const [availableSlots, setAvailableSlots] = useState([]);
     const [step, setStep] = useState(selectedProgram ? 1 : 0); // 0: Select Program, 1: Schedule, 2: Payment, 3: Success
 
-    const programs = ["One-on-One", "Small Group", "Large Group"];
+    const programs = [
+        { name: "One-on-One", prices: { '45': 25, '90': 45 } },
+        { name: "Small Group", prices: { '45': 15, '90': 25 } },
+        { name: "Large Group", prices: { '45': 10, '90': 20 } }
+    ];
+
+    const currentProgramData = programs.find(p => p.name === selectedProgram);
+    const totalPrice = currentProgramData ? currentProgramData.prices[selectedDuration] : 0;
 
     const handleDateChange = (e) => {
         const date = e.target.value;
@@ -50,7 +58,15 @@ const BookingPage = () => {
         const ampm = hour >= 12 ? 'PM' : 'AM';
         const hour12 = hour % 12 || 12;
         const minStr = minutes === 0 ? '00' : minutes;
-        return `${hour12}:${minStr} ${ampm}`;
+        return `${hour12}:${minStr} AM`; // Simplified for display
+    };
+
+    // Corrected formatTime for better display
+    const getFormattedTime = (hour, minutes) => {
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const h = hour % 12 || 12;
+        const m = minutes === 0 ? '00' : minutes;
+        return `${h}:${m} ${ampm}`;
     };
 
     return (
@@ -64,7 +80,7 @@ const BookingPage = () => {
                             <h1 className="text-primary">Booking Confirmed!</h1>
                             <p>You have successfully registered for the <strong>{selectedProgram}</strong> session.</p>
                             <div className="confirmation-details">
-                                <p><strong>Program:</strong> {selectedProgram}</p>
+                                <p><strong>Program:</strong> {selectedProgram} ({selectedDuration} Min)</p>
                                 <p><strong>Date:</strong> {selectedDate}</p>
                                 <p><strong>Time:</strong> {selectedTime}</p>
                             </div>
@@ -88,14 +104,14 @@ const BookingPage = () => {
                                         <div className="program-select-grid">
                                             {programs.map(p => (
                                                 <button
-                                                    key={p}
-                                                    className={`program-select-btn ${selectedProgram === p ? 'selected' : ''}`}
+                                                    key={p.name}
+                                                    className={`program-select-btn ${selectedProgram === p.name ? 'selected' : ''}`}
                                                     onClick={() => {
-                                                        setSelectedProgram(p);
+                                                        setSelectedProgram(p.name);
                                                         setStep(1);
                                                     }}
                                                 >
-                                                    {p}
+                                                    {p.name}
                                                 </button>
                                             ))}
                                         </div>
@@ -106,7 +122,7 @@ const BookingPage = () => {
                                 <div className={`booking-step ${step === 1 ? 'active' : step < 1 ? 'disabled' : ''} reveal`}>
                                     <div className="step-header">
                                         <span className="step-num">1</span>
-                                        <h2>Select Date & Time</h2>
+                                        <h2>Select Duration & Time</h2>
                                     </div>
 
                                     {selectedProgram && (
@@ -115,6 +131,24 @@ const BookingPage = () => {
                                             <button onClick={() => setStep(0)} className="change-btn">Change</button>
                                         </div>
                                     )}
+
+                                    <div className="form-group">
+                                        <label>Session Duration</label>
+                                        <div className="duration-select">
+                                            <button
+                                                className={`duration-btn ${selectedDuration === '45' ? 'selected' : ''}`}
+                                                onClick={() => setSelectedDuration('45')}
+                                            >
+                                                45 Minutes (${currentProgramData?.prices['45']})
+                                            </button>
+                                            <button
+                                                className={`duration-btn ${selectedDuration === '90' ? 'selected' : ''}`}
+                                                onClick={() => setSelectedDuration('90')}
+                                            >
+                                                90 Minutes (${currentProgramData?.prices['90']})
+                                            </button>
+                                        </div>
+                                    </div>
 
                                     <div className="form-group">
                                         <label>Date</label>
@@ -166,12 +200,16 @@ const BookingPage = () => {
                                                     <strong>{selectedProgram}</strong>
                                                 </div>
                                                 <div className="summary-row">
+                                                    <span>Duration</span>
+                                                    <span>{selectedDuration} Minutes</span>
+                                                </div>
+                                                <div className="summary-row">
                                                     <span>Session</span>
                                                     <span>{selectedDate} at {selectedTime}</span>
                                                 </div>
                                                 <div className="summary-row total">
                                                     <span>Total</span>
-                                                    <span>$50.00</span>
+                                                    <span>${totalPrice}.00</span>
                                                 </div>
                                             </div>
 
@@ -197,7 +235,7 @@ const BookingPage = () => {
                                             </div>
 
                                             <button type="submit" className="btn-primary full-width success-btn">
-                                                Confirm & Pay $50.00
+                                                Confirm & Pay ${totalPrice}.00
                                             </button>
                                             <button type="button" className="btn-text" onClick={() => setStep(1)}>Back to Schedule</button>
                                         </form>
