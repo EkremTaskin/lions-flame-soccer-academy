@@ -1,7 +1,30 @@
+import React, { useState } from 'react';
+import { submitContactForm } from '../utils/mockApi';
 import logo from '../assets/lions-flame-logo.png';
 import './Contact.css';
 
 const Contact = () => {
+    const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+    const [status, setStatus] = useState('idle'); // idle, submitting, success, error
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus('submitting');
+        try {
+            await submitContactForm(formData);
+            setStatus('success');
+            setFormData({ name: '', email: '', message: '' });
+            setTimeout(() => setStatus('idle'), 5000);
+        } catch (err) {
+            console.error('Submission error:', err);
+            setStatus('error');
+            setTimeout(() => setStatus('idle'), 3000);
+        }
+    };
     return (
         <section id="contact" className="contact-section">
             <div className="container">
@@ -10,8 +33,32 @@ const Contact = () => {
                     <p className="section-subtitle">Have questions? Reach out to our academy staff directly.</p>
                 </div>
 
-                <div className="contact-info-only">
-                    <div className="info-grid">
+                <div className="contact-layout">
+                    <div className="contact-form-container">
+                        <h3>Send Us a Message</h3>
+                        <form onSubmit={handleSubmit} className="contact-form text-left">
+                            <div className="form-group">
+                                <label>Your Name</label>
+                                <input type="text" name="name" placeholder="John Doe" value={formData.name} onChange={handleChange} required className="form-input" />
+                            </div>
+                            <div className="form-group">
+                                <label>Your Email</label>
+                                <input type="email" name="email" placeholder="john@example.com" value={formData.email} onChange={handleChange} required className="form-input" />
+                            </div>
+                            <div className="form-group">
+                                <label>Message</label>
+                                <textarea name="message" placeholder="How can we help you?" rows="5" value={formData.message} onChange={handleChange} required className="form-input"></textarea>
+                            </div>
+                            <button type="submit" className="btn-primary full-width success-btn mt-2" disabled={status === 'submitting'}>
+                                {status === 'submitting' ? 'Sending...' : 'Send Message'}
+                            </button>
+                            {status === 'success' && <div className="form-message form-success mt-3 text-center">Message sent successfully! We'll get back to you soon.</div>}
+                            {status === 'error' && <div className="form-message form-error mt-3 text-center" style={{color: 'red'}}>Failed to send message. Please try again.</div>}
+                        </form>
+                    </div>
+
+                    <div className="contact-info-container">
+                        <div className="info-grid">
                         <div className="info-card">
                             <span className="icon">📍</span>
                             <h3>Our Academy</h3>
@@ -33,11 +80,12 @@ const Contact = () => {
                         </div>
                     </div>
 
-                    <div className="social-container text-center">
-                        <h3>Follow The Pride</h3>
-                        <div className="social-links">
-                            <a href="#" className="social-icon">Instagram</a>
-                            <a href="#" className="social-icon">Facebook</a>
+                        <div className="social-container text-center">
+                            <h3>Follow The Pride</h3>
+                            <div className="social-links">
+                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon">Instagram</a>
+                                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon">Facebook</a>
+                            </div>
                         </div>
                     </div>
                 </div>

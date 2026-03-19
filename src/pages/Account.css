@@ -1,0 +1,110 @@
+.account-page {
+    padding: 8rem 0;
+    min-height: 100vh;
+    background: #f4f6f9;
+}
+
+.account-card {
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.account-card h2 {
+    font-size: 2rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.mb-4 { margin-bottom: 1.5rem; }
+.mb-5 { margin-bottom: 2rem; }
+.mt-3 { margin-top: 1rem; }
+.pt-4 { padding-top: 1.5rem; }
+
+.account-info h4, .account-security h4 {
+    margin-bottom: 1rem;
+    color: var(--secondary);
+    font-size: 1.25rem;
+}
+
+.account-info p {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.password-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.password-form .form-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #f9f9f9;
+}
+
+.password-form .form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: white;
+}
+
+.role-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.role-badge.admin {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.role-badge.user {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.btn-danger {
+    background: #d32f2f;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s;
+}
+
+.btn-danger:hover {
+    background: #b71c1c;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(211, 47, 47, 0.4);
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.alert-danger {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+}
+
+.alert-success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}

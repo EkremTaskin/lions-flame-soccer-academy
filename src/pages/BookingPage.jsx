@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { fetchAvailableSlots, submitBooking } from '../utils/mockApi';
 import './BookingPage.css';
-
 const BookingPage = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -13,6 +13,8 @@ const BookingPage = () => {
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
     const [availableSlots, setAvailableSlots] = useState([]);
+    const [isLoadingSlots, setIsLoadingSlots] = useState(false);
+    const [isSubmittingBooking, setIsSubmittingBooking] = useState(false);
     const [step, setStep] = useState(selectedProgram ? 1 : 0); // 0: Select Program, 1: Schedule, 2: Payment, 3: Success
 
     const programs = [
@@ -24,49 +26,43 @@ const BookingPage = () => {
     const currentProgramData = programs.find(p => p.name === selectedProgram);
     const totalPrice = currentProgramData ? currentProgramData.prices[selectedDuration] : 0;
 
-    const handleDateChange = (e) => {
+    const handleDateChange = async (e) => {
         const date = e.target.value;
         setSelectedDate(date);
-        generateSlots(date);
         setSelectedTime('');
-    };
-
-    const handlePaymentSubmit = (e) => {
-        e.preventDefault();
-        setTimeout(() => {
-            setStep(3);
-        }, 1000);
-    };
-
-    const generateSlots = (dateString) => {
-        const date = new Date(dateString);
-        const day = date.getDay();
-        const isWeekend = day === 0 || day === 6;
-
-        let startTime = isWeekend ? 9 : 17;
-        let endTime = 21;
-
-        const slots = [];
-        for (let hour = startTime; hour < endTime; hour++) {
-            slots.push(formatTime(hour, 0));
-            slots.push(formatTime(hour, 30));
+        setAvailableSlots([]);
+        
+        if (date) {
+            setIsLoadingSlots(true);
+            try {
+                const slots = await fetchAvailableSlots(date);
+                setAvailableSlots(slots);
+            } catch (error) {
+                console.error("Error fetching slots:", error);
+            } finally {
+                setIsLoadingSlots(false);
+            }
         }
-        setAvailableSlots(slots);
     };
 
-    const formatTime = (hour, minutes) => {
-        const ampm = hour >= 12 ? 'PM' : 'AM';
-        const hour12 = hour % 12 || 12;
-        const minStr = minutes === 0 ? '00' : minutes;
-        return `${hour12}:${minStr} AM`; // Simplified for display
-    };
-
-    // Corrected formatTime for better display
-    const getFormattedTime = (hour, minutes) => {
-        const ampm = hour >= 12 ? 'PM' : 'AM';
-        const h = hour % 12 || 12;
-        const m = minutes === 0 ? '00' : minutes;
-        return `${h}:${m} ${ampm}`;
+    const handlePaymentSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmittingBooking(true);
+        try {
+            await submitBooking({
+                program: selectedProgram,
+                duration: selectedDuration,
+                date: selectedDate,
+                time: selectedTime,
+                price: totalPrice
+            });
+            setStep(3);
+        } catch (error) {
+            console.error("Booking error:", error);
+            alert("Booking failed. Please try again.");
+        } finally {
+            setIsSubmittingBooking(false);
+        }
     };
 
     return (
@@ -75,7 +71,7 @@ const BookingPage = () => {
             <div className="booking-page">
                 <div className="container booking-container">
                     {step === 3 ? (
-                        <div className="booking-success text-center reveal">
+                        <div className="booking-success text-center">
                             <div className="success-icon">🎉</div>
                             <h1 className="text-primary">Booking Confirmed!</h1>
                             <p>You have successfully registered for the <strong>{selectedProgram}</strong> session.</p>
@@ -88,7 +84,7 @@ const BookingPage = () => {
                         </div>
                     ) : (
                         <>
-                            <div className="booking-header reveal">
+                            <div className="booking-header">
                                 <h1 className="text-secondary">Join The Pride</h1>
                                 <p>Secure your spot in our elite training sessions.</p>
                             </div>
@@ -96,7 +92,7 @@ const BookingPage = () => {
                             <div className="booking-grid">
                                 {/* STEP 0: Select Program if not provided */}
                                 {step === 0 && (
-                                    <div className="booking-step active reveal">
+                                    <div className="booking-step active">
                                         <div className="step-header">
                                             <span className="step-num">!</span>
                                             <h2>Choose Your Program</h2>
@@ -163,17 +159,25 @@ const BookingPage = () => {
                                     {selectedDate && (
                                         <div className="slots-container">
                                             <label>Available Slots</label>
-                                            <div className="slots-grid">
-                                                {availableSlots.map((slot) => (
-                                                    <button
-                                                        key={slot}
-                                                        className={`slot-btn ${selectedTime === slot ? 'selected' : ''}`}
-                                                        onClick={() => setSelectedTime(slot)}
-                                                    >
-                                                        {slot}
-                                                    </button>
-                                                ))}
-                                            </div>
+                                            {isLoadingSlots ? (
+                                                <div className="text-center p-4">Loading available times...</div>
+                                            ) : availableSlots.length > 0 ? (
+                                                <div className="slots-grid">
+                                                    {availableSlots.map((slot) => (
+                                                        <button
+                                                            key={slot}
+                                                            className={`slot-btn ${selectedTime === slot ? 'selected' : ''}`}
+                                                            onClick={() => setSelectedTime(slot)}
+                                                        >
+                                                            {slot}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="text-center p-4" style={{ marginTop: '1rem', color: '#888' }}>
+                                                    No slots available for this date.
+                                                </div>
+                                            )}
                                         </div>
                                     )}
 
@@ -234,8 +238,8 @@ const BookingPage = () => {
                                                 </div>
                                             </div>
 
-                                            <button type="submit" className="btn-primary full-width success-btn">
-                                                Confirm & Pay ${totalPrice}.00
+                                            <button type="submit" className="btn-primary full-width success-btn" disabled={isSubmittingBooking}>
+                                                {isSubmittingBooking ? 'Processing...' : `Confirm & Pay $${totalPrice}.00`}
                                             </button>
                                             <button type="button" className="btn-text" onClick={() => setStep(1)}>Back to Schedule</button>
                                         </form>

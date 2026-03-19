@@ -1,0 +1,50 @@
+﻿
+> lions-flame-soccer-academy@0.0.0 lint
+> eslint .
+
+
+C:\Users\Warehouse-STE115(2)\.gemini\antigravity\scratch\lions-flame-soccer-academy\src\components\ParticleBackground.jsx
+  11:24  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+   9 |         const temp = [];
+  10 |         for (let i = 0; i < count; i++) {
+> 11 |             const x = (Math.random() - 0.5) * 20;
+     |                        ^^^^^^^^^^^^^ Cannot call impure function
+  12 |             const y = (Math.random() - 0.5) * 20;
+  13 |             const z = (Math.random() - 0.5) * 20;
+  14 |             temp.push(x, y, z);  react-hooks/purity
+  12:24  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+  10 |         for (let i = 0; i < count; i++) {
+  11 |             const x = (Math.random() - 0.5) * 20;
+> 12 |             const y = (Math.random() - 0.5) * 20;
+     |                        ^^^^^^^^^^^^^ Cannot call impure function
+  13 |             const z = (Math.random() - 0.5) * 20;
+  14 |             temp.push(x, y, z);
+  15 |         }                 react-hooks/purity
+  13:24  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+  11 |             const x = (Math.random() - 0.5) * 20;
+  12 |             const y = (Math.random() - 0.5) * 20;
+> 13 |             const z = (Math.random() - 0.5) * 20;
+     |                        ^^^^^^^^^^^^^ Cannot call impure function
+  14 |             temp.push(x, y, z);
+  15 |         }
+  16 |         return new Float32Array(temp);                    react-hooks/purity
+
+C:\Users\Warehouse-STE115(2)\.gemini\antigravity\scratch\lions-flame-soccer-academy\src\pages\BookingPage.jsx
+   1:27  error  'useEffect' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                  no-unused-vars
+  58:15  error  'ampm' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u              no-unused-vars
+  65:11  error  'getFormattedTime' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Warehouse-STE115(2)\.gemini\antigravity\scratch\lions-flame-soccer-academy\src\pages\Home.jsx
+  82:27  error  'rotateX' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+Γ£û 7 problems (7 errors, 0 warnings)
+

@@ -1,0 +1,66 @@
+﻿
+> lions-flame-soccer-academy@0.0.0 lint
+> eslint .
+
+
+C:\Users\Warehouse-STE115(2)\.gemini\antigravity\scratch\lions-flame-soccer-academy\src\components\Contact.jsx
+  22:18  error  'error' is defined but never used  no-unused-vars
+
+C:\Users\Warehouse-STE115(2)\.gemini\antigravity\scratch\lions-flame-soccer-academy\src\components\ParticleBackground.jsx
+  11:24  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+   9 |         const temp = [];
+  10 |         for (let i = 0; i < count; i++) {
+> 11 |             const x = (Math.random() - 0.5) * 20;
+     |                        ^^^^^^^^^^^^^ Cannot call impure function
+  12 |             const y = (Math.random() - 0.5) * 20;
+  13 |             const z = (Math.random() - 0.5) * 20;
+  14 |             temp.push(x, y, z);  react-hooks/purity
+  12:24  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+  10 |         for (let i = 0; i < count; i++) {
+  11 |             const x = (Math.random() - 0.5) * 20;
+> 12 |             const y = (Math.random() - 0.5) * 20;
+     |                        ^^^^^^^^^^^^^ Cannot call impure function
+  13 |             const z = (Math.random() - 0.5) * 20;
+  14 |             temp.push(x, y, z);
+  15 |         }                 react-hooks/purity
+  13:24  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+  11 |             const x = (Math.random() - 0.5) * 20;
+  12 |             const y = (Math.random() - 0.5) * 20;
+> 13 |             const z = (Math.random() - 0.5) * 20;
+     |                        ^^^^^^^^^^^^^ Cannot call impure function
+  14 |             temp.push(x, y, z);
+  15 |         }
+  16 |         return new Float32Array(temp);                    react-hooks/purity
+
+C:\Users\Warehouse-STE115(2)\.gemini\antigravity\scratch\lions-flame-soccer-academy\src\context\AuthContext.jsx
+   8:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react-refresh/only-export-components
+  19:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  17 |     useEffect(() => {
+  18 |         if (!auth) {
+> 19 |             setLoading(false);
+     |             ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  20 |             return;
+  21 |         }
+  22 |  react-hooks/set-state-in-effect
+
+C:\Users\Warehouse-STE115(2)\.gemini\antigravity\scratch\lions-flame-soccer-academy\src\pages\Home.jsx
+  82:27  error  'rotateX' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+Γ£û 7 problems (7 errors, 0 warnings)
+
