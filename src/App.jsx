@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import Account from './pages/Account';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { Toaster } from 'sonner';
 
 const ProtectedRoute = ({ children, requiredRole }) => {
   const { currentUser, userRole } = useAuth();
@@ -20,6 +21,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
 function App() {
   return (
     <AuthProvider>
+      <Toaster position="top-right" richColors />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { fetchAvailableSlots, submitBooking } from '../utils/mockApi';
+import { toast } from 'sonner';
+import Loader from '../components/Loader';
+import { useAuth } from '../context/AuthContext';
 import './BookingPage.css';
 const BookingPage = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const initialProgram = queryParams.get('program') || '';
+    
+    const { currentUser } = useAuth();
 
     const [selectedProgram, setSelectedProgram] = useState(initialProgram);
     const [selectedDuration, setSelectedDuration] = useState('45'); // '45' or '90'
@@ -37,8 +42,12 @@ const BookingPage = () => {
             try {
                 const slots = await fetchAvailableSlots(date);
                 setAvailableSlots(slots);
+                if (slots.length === 0) {
+                    toast.info('No available slots found for the selected date.');
+                }
             } catch (error) {
                 console.error("Error fetching slots:", error);
+                toast.error('An error occurred while loading slots.');
             } finally {
                 setIsLoadingSlots(false);
             }
@@ -54,12 +63,15 @@ const BookingPage = () => {
                 duration: selectedDuration,
                 date: selectedDate,
                 time: selectedTime,
-                price: totalPrice
+                price: totalPrice,
+                userId: currentUser?.uid,
+                userEmail: currentUser?.email
             });
+            toast.success('Booking completed successfully!');
             setStep(3);
         } catch (error) {
             console.error("Booking error:", error);
-            alert("Booking failed. Please try again.");
+            toast.error("Booking failed. Please try again.");
         } finally {
             setIsSubmittingBooking(false);
         }
@@ -160,7 +172,9 @@ const BookingPage = () => {
                                         <div className="slots-container">
                                             <label>Available Slots</label>
                                             {isLoadingSlots ? (
-                                                <div className="text-center p-4">Loading available times...</div>
+                                                <div className="text-center p-4">
+                                                    <Loader size="small" />
+                                                </div>
                                             ) : availableSlots.length > 0 ? (
                                                 <div className="slots-grid">
                                                     {availableSlots.map((slot) => (
@@ -238,8 +252,13 @@ const BookingPage = () => {
                                                 </div>
                                             </div>
 
-                                            <button type="submit" className="btn-primary full-width success-btn" disabled={isSubmittingBooking}>
-                                                {isSubmittingBooking ? 'Processing...' : `Confirm & Pay $${totalPrice}.00`}
+                                            <button type="submit" className="btn-primary full-width success-btn" disabled={isSubmittingBooking} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                                                {isSubmittingBooking ? (
+                                                    <>
+                                                        <div className="spinner" style={{width: '20px', height: '20px', borderWidth: '2px', borderColor: 'rgba(255,255,255,0.3)', borderTopColor: '#fff'}}></div>
+                                                        <span>Processing...</span>
+                                                    </>
+                                                ) : `Confirm & Pay $${totalPrice}.00`}
                                             </button>
                                             <button type="button" className="btn-text" onClick={() => setStep(1)}>Back to Schedule</button>
                                         </form>

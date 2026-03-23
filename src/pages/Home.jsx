@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from '../components/Navbar';
@@ -17,6 +18,21 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
     const mainRef = useRef(null);
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.hash) {
+            setTimeout(() => {
+                const id = location.hash.replace('#', '');
+                const element = document.getElementById(id);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        } else if (window.scrollY > 0) {
+             window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+    }, [location]);
 
     useEffect(() => {
         const ctx = gsap.context(() => {

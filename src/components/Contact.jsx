@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { submitContactForm } from '../utils/mockApi';
 import logo from '../assets/lions-flame-logo.png';
 import './Contact.css';
@@ -61,22 +62,28 @@ const Contact = () => {
                         <div className="info-grid">
                         <div className="info-card">
                             <span className="icon">📍</span>
-                            <h3>Our Academy</h3>
-                            <p>Location: Coming Soon</p>
+                            <div className="info-card-content">
+                                <h3>Academy Location</h3>
+                                <p>Coming Soon</p>
+                            </div>
                         </div>
 
                         <div className="info-card">
                             <span className="icon">📞</span>
-                            <h3>Call Us</h3>
-                            <p>+1 (555) 123-4567</p>
-                            <p className="sub-info">Available Mon-Fri, 9am - 6pm</p>
+                            <div className="info-card-content">
+                                <h3>Call Us</h3>
+                                <p>+1 (555) 123-4567</p>
+                                <p className="sub-info">Mon-Fri, 9am - 6pm</p>
+                            </div>
                         </div>
 
                         <div className="info-card">
                             <span className="icon">✉️</span>
-                            <h3>Email</h3>
-                            <p>info@lionsflame.academy</p>
-                            <p className="sub-info">Response within 24 hours</p>
+                            <div className="info-card-content">
+                                <h3>Email</h3>
+                                <p>info@lionsflame.academy</p>
+                                <p className="sub-info">Replies in 24 hrs</p>
+                            </div>
                         </div>
                     </div>
 
@@ -103,21 +110,21 @@ const Contact = () => {
                     <div className="footer-col">
                         <h3>Quick Links</h3>
                         <ul>
-                            <li><a href="/#home">Home</a></li>
-                            <li><a href="/#about">Head Coach</a></li>
-                            <li><a href="/#gallery">Gallery</a></li>
-                            <li><a href="/#testimonials">Stories</a></li>
-                            <li><a href="/#faq">FAQ</a></li>
+                            <li><Link to="/#home">Home</Link></li>
+                            <li><Link to="/#about">Head Coach</Link></li>
+                            <li><Link to="/#gallery">Gallery</Link></li>
+                            <li><Link to="/#testimonials">Stories</Link></li>
+                            <li><Link to="/#faq">FAQ</Link></li>
                         </ul>
                     </div>
 
                     <div className="footer-col">
                         <h3>Training</h3>
                         <ul>
-                            <li><a href="/book?program=One-on-One">One-on-One</a></li>
-                            <li><a href="/book?program=Small Group">Small Group</a></li>
-                            <li><a href="/book?program=Large Group">Large Group</a></li>
-                            <li><a href="/book">Schedule Trial</a></li>
+                            <li><Link to="/book?program=One-on-One">One-on-One</Link></li>
+                            <li><Link to="/book?program=Small Group">Small Group</Link></li>
+                            <li><Link to="/book?program=Large Group">Large Group</Link></li>
+                            <li><Link to="/book">Schedule Trial</Link></li>
                         </ul>
                     </div>
 

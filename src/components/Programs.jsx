@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Programs.css';
 import imgOneOnOne from '../assets/private_training_img_1769098655307.png';
 import imgSmallGroup from '../assets/small_group_img_1769098675408.png';
@@ -80,7 +81,7 @@ const Programs = () => {
                                         <li key={i}>{feature}</li>
                                     ))}
                                 </ul>
-                                <a href={`/book?program=${encodeURIComponent(program.title)}`} className="btn-program">Join Team</a>
+                                <Link to={`/book?program=${encodeURIComponent(program.title)}`} className="btn-program">Join Team</Link>
                             </div>
                         </div>
                     ))}

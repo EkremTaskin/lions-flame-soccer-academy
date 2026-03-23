@@ -4,6 +4,8 @@ import { auth, db } from '../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import Navbar from '../components/Navbar';
+import { toast } from 'sonner';
+import '../components/Loader.css';
 import './Login.css';
 
 const Login = () => {
@@ -22,6 +24,7 @@ const Login = () => {
         try {
             if (isLogin) {
                 await signInWithEmailAndPassword(auth, email, password);
+                toast.success('Successfully logged in!');
                 navigate('/');
             } else {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -32,10 +35,12 @@ const Login = () => {
                     role: 'user',
                     createdAt: new Date().toISOString()
                 });
+                toast.success('Account created successfully!');
                 navigate('/');
             }
         } catch (err) {
             console.error(err);
+            toast.error(err.message || 'Login failed.');
             setError(err.message || 'Authentication failed');
         } finally {
             setLoading(false);
@@ -77,8 +82,13 @@ const Login = () => {
                             
                             {error && <div className="form-error text-center p-2 mb-3 rounded" style={{color:'red'}}>{error}</div>}
                             
-                            <button type="submit" className="btn-primary full-width" disabled={loading}>
-                                {loading ? 'Processing...' : (isLogin ? 'Log In' : 'Sign Up')}
+                            <button type="submit" className="btn-primary full-width" disabled={loading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                                {loading ? (
+                                    <>
+                                        <div className="spinner" style={{width: '20px', height: '20px', borderWidth: '2px', borderColor: 'rgba(255,255,255,0.3)', borderTopColor: '#fff'}}></div>
+                                        <span>Processing...</span>
+                                    </>
+                                ) : (isLogin ? 'Log In' : 'Sign Up')}
                             </button>
                         </form>
                         
