@@ -26,11 +26,15 @@ const About = () => {
                         </p>
                         
                         <div className="coached-teams mt-4">
-                            <h4 className="text-secondary" style={{fontSize: '1.2rem', marginBottom: '0.8rem'}}>Teams Coached:</h4>
+                            <h4 className="text-primary" style={{fontSize: '1.2rem', marginBottom: '0.8rem'}}>Teams Coached:</h4>
                             <ul style={{listStyle: 'none', padding: 0}}>
                                 <li style={{marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '8px'}}>
                                     <span style={{color: 'var(--primary)', fontWeight: 'bold'}}>→</span> 
                                     <span>WYSA Wylie United U9 Boys</span>
+                                </li>
+                                <li style={{marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                                    <span style={{color: 'var(--primary)', fontWeight: 'bold'}}>→</span> 
+                                    <span>WYSA Lions U12 Girls</span>
                                 </li>
                                 <li style={{marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '8px'}}>
                                     <span style={{color: 'var(--primary)', fontWeight: 'bold'}}>→</span> 
