@@ -16,13 +16,13 @@ const programsData = [
             min45: "$25",
             min90: "$45"
         },
-        features: ["Custom Drill Plans", "Technical Video Review", "Flexible Scheduling"]
+        features: ["Custom Drill Plans", "Flexible Scheduling"]
     },
     {
         title: "Small Group",
         age: "4–6 Players",
         image: imgSmallGroup,
-        description: "High-intensity sessions with 4-6 players. Perfect balance between individualized attention and competitive pressure. *Groups merged (U7-U10, U11-U14, U15-U17) if needed.",
+        description: "High-intensity sessions with 4-6 players. Perfect balance between individualized attention and competitive pressure. *Groups merged (U7-U10, U11-U14) if needed.",
         level: "Elite",
         pricing: {
             min45: "$15",
@@ -34,7 +34,7 @@ const programsData = [
         title: "Large Group",
         age: "8–12 Players",
         image: imgLargeGroup,
-        description: "Team-based environment focusing on game situations with 8-12 players. Great for building match-fitness and game IQ. *Groups merged (U7-U10, U11-U14, U15-U17) if needed.",
+        description: "Team-based environment focusing on game situations with 8-12 players. Great for building match-fitness and game IQ. *Groups merged (U7-U10, U11-U14) if needed.",
         level: "Atmospheric",
         pricing: {
             min45: "$10",
@@ -81,7 +81,7 @@ const Programs = () => {
                                         <li key={i}>{feature}</li>
                                     ))}
                                 </ul>
-                                <Link to={`/book?program=${encodeURIComponent(program.title)}`} className="btn-program">Join Team</Link>
+                                <Link to={`/book?program=${encodeURIComponent(program.title)}`} className="btn-program">BOOK</Link>
                             </div>
                         </div>
                     ))}
@@ -89,29 +89,20 @@ const Programs = () => {
 
                 <div className="packages-section">
                     <div className="packages-header text-center">
-                        <h3 className="sub-section-title">Membership <span className="text-primary">Packages</span></h3>
-                        <p>Unlock exclusive benefits and discounts with our lesson bundles.</p>
+                        <h3 className="sub-section-title">Special <span className="text-primary">Promotion</span></h3>
+                        <p>Unlock our exclusive limited-time lesson bundle for maximum value.</p>
                     </div>
-                    <div className="packages-grid">
-                        <div className="package-card">
-                            <div className="package-discount">5% OFF</div>
-                            <h4>4-Lesson Bundle</h4>
-                            <p className="package-validity">Valid for 2 months</p>
-                            <ul className="package-benefits">
-                                <li>Priority session selection</li>
-                                <li>Flexible scheduling</li>
-                                <li>1 Makeup session (Group only)</li>
-                            </ul>
-                        </div>
+                    <div className="packages-grid single-package">
                         <div className="package-card featured">
-                            <div className="package-discount">10% OFF</div>
-                            <h4>8-Lesson Bundle</h4>
-                            <p className="package-validity">Valid for 3 months</p>
+                            <div className="package-discount">2 FREE</div>
+                            <h4>10-Lesson Bundle</h4>
+                            <p className="package-validity">Pay for 8, Get 10 Sessions</p>
                             <ul className="package-benefits">
-                                <li>Maximum savings</li>
+                                <li>Buy 8 lessons, get 2 extra for <strong>FREE</strong></li>
                                 <li>Long-term development plan</li>
                                 <li>Priority session selection</li>
-                                <li>1 Makeup session (Group only)</li>
+                                <li>Flexible scheduling across 4 months</li>
+                                <li>2 Makeup sessions included</li>
                             </ul>
                         </div>
                     </div>

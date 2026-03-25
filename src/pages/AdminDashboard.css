@@ -104,3 +104,20 @@
     font-size: 0.85rem;
     font-weight: 500;
 }
+
+.blocked-row {
+    background-color: #fff8f8;
+    opacity: 0.8;
+}
+
+.badge-blocked {
+    background-color: #ff5252 !important;
+    color: white !important;
+}
+
+@media (max-width: 992px) {
+    .admin-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+

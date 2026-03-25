@@ -48,11 +48,11 @@ const Hero = () => {
                     <span className="text-primary">Succeed.</span>
                 </h1>
                 <p className="hero-subtitle" ref={subtitleRef}>
-                    Professional football coaching for ages 6-18.
+                    Professional soccer coaching for ages 6-14.
                     Ignite your passion and master the game at Lion's Flame Academy.
                 </p>
                 <div className="hero-buttons" ref={buttonsRef}>
-                    <Link to="/book" className="btn-primary">Book a Trial</Link>
+                    <Link to="/book" className="btn-primary">Book A Session</Link>
                     <a href="#programs" className="btn-outline">View Programs</a>
                 </div>
             </div>

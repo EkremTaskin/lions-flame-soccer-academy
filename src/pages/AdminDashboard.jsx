@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { db } from '../firebase';
-import { collection, query, getDocs } from 'firebase/firestore';
+import { collection, query, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import { fetchAvailableSlots } from '../utils/mockApi';
 import Loader from '../components/Loader';
 import { toast } from 'sonner';
 import './AdminDashboard.css';
@@ -9,33 +10,99 @@ import './AdminDashboard.css';
 const AdminDashboard = () => {
     const [allBookings, setAllBookings] = useState([]);
     const [loadingBookings, setLoadingBookings] = useState(true);
+    const [blockingSlot, setBlockingSlot] = useState(false);
+    const [blockDate, setBlockDate] = useState('');
+    const [blockTime, setBlockTime] = useState('');
+    const [availableSlots, setAvailableSlots] = useState([]);
+    const [loadingSlots, setLoadingSlots] = useState(false);
+
+    const fetchAllBookings = async () => {
+        try {
+            setLoadingBookings(true);
+            const q = query(collection(db, 'bookings'));
+            const snap = await getDocs(q);
+            const globalBookings = [];
+            snap.forEach(doc => {
+                globalBookings.push({ id: doc.id, ...doc.data() });
+            });
+            
+            // Sort by creation date
+            globalBookings.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            setAllBookings(globalBookings);
+        } catch(error) {
+            console.error('Error fetching all bookings', error);
+            toast.error('Error fetching bookings.');
+        } finally {
+            setLoadingBookings(false);
+        }
+    };
 
     useEffect(() => {
-        let active = true;
-        const fetchAllBookings = async () => {
-            try {
-                setLoadingBookings(true);
-                const q = query(collection(db, 'bookings'));
-                const snap = await getDocs(q);
-                const globalBookings = [];
-                snap.forEach(doc => {
-                    globalBookings.push({ id: doc.id, ...doc.data() });
-                });
-                
-                // Sort by creation date
-                globalBookings.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-                
-                if (active) setAllBookings(globalBookings);
-            } catch(error) {
-                console.error('Error fetching all bookings', error);
-                toast.error('Error fetching bookings.');
-            } finally {
-                if (active) setLoadingBookings(false);
-            }
-        };
         fetchAllBookings();
-        return () => { active = false; };
     }, []);
+
+    const handleDateChange = async (e) => {
+        const date = e.target.value;
+        setBlockDate(date);
+        setBlockTime('');
+        if (date) {
+            setLoadingSlots(true);
+            try {
+                const slots = await fetchAvailableSlots(date);
+                setAvailableSlots(slots);
+            } catch (error) {
+                console.error("Error fetching slots:", error);
+            } finally {
+                setLoadingSlots(false);
+            }
+        }
+    };
+
+    const handleBlockSlot = async () => {
+        if (!blockDate || !blockTime) {
+            toast.error("Please select both date and time.");
+            return;
+        }
+
+        setBlockingSlot(true);
+        try {
+            await addDoc(collection(db, "bookings"), {
+                program: "BLOCKED",
+                duration: "N/A",
+                date: blockDate,
+                time: blockTime,
+                price: 0,
+                userEmail: "ADMİN (BLOCKED)",
+                isBlocked: true,
+                createdAt: new Date().toISOString()
+            });
+            toast.success(`Slot ${blockTime} on ${blockDate} is now closed.`);
+            setBlockTime('');
+            // Refresh bookings and available slots
+            fetchAllBookings();
+            const slots = await fetchAvailableSlots(blockDate);
+            setAvailableSlots(slots);
+        } catch (error) {
+            console.error("Error blocking slot:", error);
+            toast.error("Failed to block slot.");
+        } finally {
+            setBlockingSlot(false);
+        }
+    };
+
+    const handleDeleteBooking = async (id) => {
+        if (!window.confirm("Are you sure you want to delete/unblock this record?")) return;
+        
+        try {
+            await deleteDoc(doc(db, "bookings", id));
+            toast.success("Record deleted successfully.");
+            fetchAllBookings();
+        } catch (error) {
+            console.error("Error deleting record:", error);
+            toast.error("Failed to delete record.");
+        }
+    };
 
     // Calculate sum of total revenue
     const totalRevenue = allBookings.reduce((sum, booking) => sum + (Number(booking.price) || 0), 0);
@@ -48,68 +115,124 @@ const AdminDashboard = () => {
                     
                     <div className="alert alert-success mb-4" style={{ backgroundColor: '#e8f5e9', padding: '1.5rem', borderRadius: '12px', border: '1px solid #c8e6c9', color: '#2e7d32' }}>
                         <h4 style={{margin: '0 0 0.5rem 0'}}>Admin Access Verified! ✅</h4>
-                        <p style={{margin: '0'}}>You can monitor all bookings and system activities from here.</p>
+                        <p style={{margin: '0'}}>You can monitor all bookings and manage availability from here.</p>
                     </div>
 
-                    <div className="admin-card">
-                        <div className="admin-header">
-                            <h2>Academy Control Panel</h2>
-                            <div className="admin-stats">
-                                <div className="stat-box">
-                                    <h3>{allBookings.length}</h3>
-                                    <p>Total Bookings</p>
+                    <div className="admin-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '2rem', alignItems: 'start' }}>
+                        <div className="admin-card">
+                            <div className="admin-header">
+                                <h2>Academy Control Panel</h2>
+                                <div className="admin-stats">
+                                    <div className="stat-box">
+                                        <h3>{allBookings.filter(b => !b.isBlocked).length}</h3>
+                                        <p>Total Bookings</p>
+                                    </div>
+                                    <div className="stat-box success">
+                                        <h3>${totalRevenue}</h3>
+                                        <p>Total Revenue</p>
+                                    </div>
                                 </div>
-                                <div className="stat-box success">
-                                    <h3>${totalRevenue}</h3>
-                                    <p>Total Revenue</p>
-                                </div>
+                            </div>
+
+                            <div className="bookings-section mt-3">
+                                <h4 style={{marginBottom: '1rem', color: 'var(--secondary)'}}>All Records (Sorted by Newest)</h4>
+                                
+                                {loadingBookings ? (
+                                    <div className="text-center p-5">
+                                        <Loader size="default" />
+                                        <p style={{marginTop: '1rem', color: '#666'}}>Fetching data...</p>
+                                    </div>
+                                ) : allBookings.length > 0 ? (
+                                    <div className="table-responsive">
+                                        <table className="admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Customer / Role</th>
+                                                    <th>Program</th>
+                                                    <th>Date</th>
+                                                    <th>Time</th>
+                                                    <th>Price</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {allBookings.map(book => (
+                                                    <tr key={book.id} className={book.isBlocked ? 'blocked-row' : ''}>
+                                                        <td>
+                                                            <span className={`badge-email ${book.isBlocked ? 'badge-blocked' : ''}`}>
+                                                                {book.userEmail || "Anonymous (No Info)"}
+                                                            </span>
+                                                        </td>
+                                                        <td><strong>{book.program}</strong></td>
+                                                        <td>{book.date}</td>
+                                                        <td>{book.time}</td>
+                                                        <td><strong style={{color: book.isBlocked ? '#666' : '#2e7d32'}}>${book.price}.00</strong></td>
+                                                        <td>
+                                                            <button 
+                                                                onClick={() => handleDeleteBooking(book.id)}
+                                                                style={{ padding: '5px 10px', fontSize: '12px', borderRadius: '4px', background: '#ff5252', color: 'white', border: 'none', cursor: 'pointer' }}
+                                                            >
+                                                                Delete
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                ) : (
+                                    <div className="alert" style={{background: '#f8f9fa', color: '#666', border: '1px solid #ddd'}}>
+                                        No records found in the system yet.
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        <div className="bookings-section mt-3">
-                            <h4 style={{marginBottom: '1rem', color: 'var(--secondary)'}}>All Bookings (System Wide)</h4>
+                        <div className="admin-card">
+                            <h3>Manage Availability</h3>
+                            <p style={{ fontSize: '14px', color: '#666', marginBottom: '1.5rem' }}>Block specific time slots to make them unavailable for booking.</p>
                             
-                            {loadingBookings ? (
-                                <div className="text-center p-5">
-                                    <Loader size="default" />
-                                    <p style={{marginTop: '1rem', color: '#666'}}>Fetching data...</p>
-                                </div>
-                            ) : allBookings.length > 0 ? (
-                                <div className="table-responsive">
-                                    <table className="admin-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Customer Email</th>
-                                                <th>Program</th>
-                                                <th>Date</th>
-                                                <th>Time</th>
-                                                <th>Duration</th>
-                                                <th>Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {allBookings.map(book => (
-                                                <tr key={book.id}>
-                                                    <td>
-                                                        <span className="badge-email">
-                                                            {book.userEmail || "Anonymous (No Info)"}
-                                                        </span>
-                                                    </td>
-                                                    <td><strong>{book.program}</strong></td>
-                                                    <td>{book.date}</td>
-                                                    <td>{book.time}</td>
-                                                    <td>{book.duration} Min</td>
-                                                    <td><strong style={{color: '#2e7d32'}}>${book.price}.00</strong></td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            ) : (
-                                <div className="alert" style={{background: '#f8f9fa', color: '#666', border: '1px solid #ddd'}}>
-                                    No booking records found in the system yet.
-                                </div>
-                            )}
+                            <div className="form-group mb-3">
+                                <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>Select Date</label>
+                                <input 
+                                    type="date" 
+                                    value={blockDate}
+                                    onChange={handleDateChange}
+                                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+                                    min={new Date().toISOString().split('T')[0]}
+                                />
+                            </div>
+
+                            <div className="form-group mb-3">
+                                <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>Select Time Slot</label>
+                                {loadingSlots ? (
+                                    <div className="text-center p-2"><Loader size="small" /></div>
+                                ) : availableSlots.length > 0 ? (
+                                    <select 
+                                        value={blockTime}
+                                        onChange={(e) => setBlockTime(e.target.value)}
+                                        style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+                                    >
+                                        <option value="">-- Choose a Slot --</option>
+                                        {availableSlots.map(slot => (
+                                            <option key={slot} value={slot}>{slot}</option>
+                                        ))}
+                                    </select>
+                                ) : blockDate ? (
+                                    <p style={{ fontSize: '12px', color: '#ff5252' }}>No free slots on this date.</p>
+                                ) : (
+                                    <p style={{ fontSize: '12px', color: '#888' }}>Please select a date first.</p>
+                                )}
+                            </div>
+
+                            <button 
+                                onClick={handleBlockSlot}
+                                disabled={blockingSlot || !blockTime}
+                                className="btn-primary full-width mt-3"
+                                style={{ background: 'var(--secondary)', color: 'white' }}
+                            >
+                                {blockingSlot ? 'Blocking...' : 'Block Selected Slot'}
+                            </button>
                         </div>
                     </div>
 
@@ -120,3 +243,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+

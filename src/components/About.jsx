@@ -7,7 +7,7 @@ const About = () => {
         <section id="about" className="about-section">
             <div className="container about-container">
                 <div className="about-image-wrapper">
-                    <img src={coachImg} alt="Head Coach Marcus Sterling" className="about-image" />
+                    <img src={coachImg} alt="Head Coach Caglayan Asim Saglik" className="about-image" />
                 </div>
                 <div className="about-text">
                     <h2 className="section-title">Meet Our <span className="text-primary">Head Coach</span></h2>
@@ -24,6 +24,20 @@ const About = () => {
                             helping young athletes reach their full potential, Caglayan combines proven coaching methods
                             with a love for the game to inspire growth both on and off the field.
                         </p>
+                        
+                        <div className="coached-teams mt-4">
+                            <h4 className="text-secondary" style={{fontSize: '1.2rem', marginBottom: '0.8rem'}}>Teams Coached:</h4>
+                            <ul style={{listStyle: 'none', padding: 0}}>
+                                <li style={{marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                                    <span style={{color: 'var(--primary)', fontWeight: 'bold'}}>→</span> 
+                                    <span>WYSA Wylie United U9 Boys</span>
+                                </li>
+                                <li style={{marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                                    <span style={{color: 'var(--primary)', fontWeight: 'bold'}}>→</span> 
+                                    <span>Texas Horizon Academy (THA) Eagles U14 Boys</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <ul className="stats-grid">
                         <li>
