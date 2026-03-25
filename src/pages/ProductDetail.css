@@ -1,0 +1,289 @@
+.product-detail-layout {
+    background-color: #121212;
+    min-height: 100vh;
+    padding-top: 5rem;
+    color: white;
+}
+
+.product-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.pd-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.breadcrumb {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.breadcrumb a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb a:hover {
+    color: var(--primary);
+}
+
+.pd-nav {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.nav-divider {
+    color: #333;
+}
+
+.pd-nav .nav-item {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.pd-nav .nav-item:hover {
+    color: var(--primary);
+}
+
+.pd-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    margin-bottom: 4rem;
+}
+
+/* Gallery */
+.pd-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.pd-main-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: #000;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    overflow: hidden;
+}
+
+.pd-main-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pd-thumbnails {
+    display: flex;
+    gap: 1rem;
+}
+
+.pd-thumb {
+    width: 80px;
+    height: 80px;
+    background: #000;
+    border: 1px solid #222;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+}
+
+.pd-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pd-thumb.active {
+    border-color: var(--primary);
+}
+
+.pd-thumb.video-thumb {
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.play-icon {
+    font-size: 1.5rem;
+    color: white;
+}
+
+/* Info */
+.pd-info {
+    padding-top: 1rem;
+}
+
+.pd-title {
+    font-size: 2.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.pd-prices {
+    display: flex;
+    gap: 1rem;
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.pd-prices .p-original {
+    text-decoration: line-through;
+    color: #666;
+}
+
+.pd-prices .p-current {
+    font-weight: 700;
+    color: white;
+}
+
+.opt-group {
+    margin-bottom: 1.5rem;
+}
+
+.opt-group label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.color-swatches {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid #333;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+}
+
+.swatch.active::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 1px solid white;
+    border-radius: 50%;
+}
+
+.swatch.white {
+    background: white;
+}
+
+.swatch.red {
+    background: #ff4500;
+}
+
+.pd-select {
+    width: 100%;
+    background: #222;
+    border: 1px solid #333;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    outline: none;
+}
+
+.qty-picker {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: #222;
+    width: fit-content;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid #333;
+    border-radius: 50px;
+}
+
+.qty-picker button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.btn-add-cart {
+    width: 100%;
+    background: #ff4500; /* Matching reference's salmon-orange */
+    color: white;
+    border: none;
+    padding: 1.25rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 2rem 0;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.btn-add-cart:hover {
+    opacity: 0.9;
+}
+
+/* Socials */
+.pd-socials {
+    display: flex;
+    gap: 1.5rem;
+    color: #888;
+}
+
+.social-icon {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.social-icon:hover {
+    color: white;
+}
+
+/* Description Section */
+.pd-description {
+    padding-top: 3rem;
+    border-top: 1px solid #1a1a1a;
+}
+
+.pd-desc-intro {
+    font-size: 1.15rem;
+    margin-bottom: 2rem;
+    color: #ccc;
+}
+
+.pd-details-list {
+    list-style: none;
+    padding: 0;
+}
+
+.pd-details-list li {
+    font-size: 1.05rem;
+    margin-bottom: 0.75rem;
+    color: #fff;
+    font-weight: 400;
+}
+
+@media (max-width: 968px) {
+    .pd-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+}

@@ -6,46 +6,8 @@ import capImg from '../assets/shop/cap.png';
 import bottleImg from '../assets/shop/bottle.png';
 import keychainImg from '../assets/shop/keychain.png';
 import bannerImg from '../assets/shop/banner.png';
+import { productsData } from '../data/shopStore';
 import './Shop.css';
-
-const productsData = [
-    {
-        id: 1,
-        name: "Lions Academy Pro Jersey",
-        price: 45.00,
-        originalPrice: 55.00,
-        image: jerseyImg,
-        badge: "PRE-ORDER NOW!",
-        category: "All Products"
-    },
-    {
-        id: 2,
-        name: "Lions Academy Trucker Hat",
-        price: 25.00,
-        originalPrice: 35.00,
-        image: capImg,
-        badge: "PRE-ORDER NOW!",
-        category: "All Products"
-    },
-    {
-        id: 3,
-        name: "24oz Double Wall Water Bottle",
-        price: 30.00,
-        originalPrice: 40.00,
-        image: bottleImg,
-        badge: "NEW ARRIVAL",
-        category: "All Products"
-    },
-    {
-        id: 4,
-        name: "Official Academy Keychain",
-        price: 12.00,
-        originalPrice: 15.00,
-        image: keychainImg,
-        badge: "BEST SELLER",
-        category: "All Products"
-    }
-];
 
 const Shop = () => {
     const [priceRange, setPriceRange] = useState(45);
@@ -124,7 +86,7 @@ const Shop = () => {
 
                         <div className="shop-product-grid">
                             {productsData.map(product => (
-                                <div key={product.id} className="shop-product-card">
+                                <Link key={product.id} to={`/shop/${product.id}`} className="shop-product-card">
                                     <div className="product-img-box">
                                         {product.badge && <span className="p-badge">{product.badge}</span>}
                                         <img src={product.image} alt={product.name} />
@@ -136,7 +98,7 @@ const Shop = () => {
                                             <span className="p-current">${product.price.toFixed(2)}</span>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     </main>
