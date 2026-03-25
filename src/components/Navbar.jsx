@@ -61,22 +61,33 @@ const Navbar = () => {
             <li><Link to="/#testimonials" onClick={(e) => handleLinkClick(e, '#testimonials')}>Stories</Link></li>
             <li><Link to="/shop">Shop</Link></li>
             {isAdmin && <li><Link to="/admin">Admin</Link></li>}
-            {currentUser ? (
-              <li><Link to="/account">Account</Link></li>
-            ) : (
-              <li><Link to="/login">Login</Link></li>
-            )}
           </ul>
           <Link to="/#contact" className="btn-primary mobile-btn" onClick={(e) => handleLinkClick(e, '#contact')}>Contact us!</Link>
         </div>
 
-        <button className={`hamburger ${isActive ? 'active' : ''}`} onClick={toggleMenu} aria-label="Menu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <div className="nav-actions">
+          {currentUser ? (
+            <Link to="/account" className="nav-user-link">
+              <span className="icon">👤</span> Account
+            </Link>
+          ) : (
+            <Link to="/login" className="nav-user-link">
+              <span className="icon">👤</span> Log In
+            </Link>
+          )}
+          <Link to="/shop" className="nav-cart-btn">
+            <span className="icon">🛒</span>
+            <span className="cart-badge">0</span>
+          </Link>
+          
+          <button className={`hamburger ${isActive ? 'active' : ''}`} onClick={toggleMenu} aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
 
-        <Link to="/#contact" className="btn-primary desktop-btn" onClick={(e) => handleLinkClick(e, '#contact')}>Contact us!</Link>
+          <Link to="/#contact" className="btn-primary desktop-btn" onClick={(e) => handleLinkClick(e, '#contact')}>Contact us!</Link>
+        </div>
       </div>
     </nav>
   );
