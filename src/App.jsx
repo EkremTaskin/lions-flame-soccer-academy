@@ -5,6 +5,7 @@ import BookingPage from './pages/BookingPage';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import Account from './pages/Account';
+import Shop from './pages/Shop';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Toaster } from 'sonner';
 
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/shop" element={<Shop />} />
         
         {/* Only logged in users can book */}
         <Route path="/book" element={

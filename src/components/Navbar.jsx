@@ -59,6 +59,7 @@ const Navbar = () => {
             <li><Link to="/#programs" onClick={(e) => handleLinkClick(e, '#programs')}>Programs</Link></li>
             <li><Link to="/#gallery" onClick={(e) => handleLinkClick(e, '#gallery')}>Gallery</Link></li>
             <li><Link to="/#testimonials" onClick={(e) => handleLinkClick(e, '#testimonials')}>Stories</Link></li>
+            <li><Link to="/shop">Shop</Link></li>
             {isAdmin && <li><Link to="/admin">Admin</Link></li>}
             {currentUser ? (
               <li><Link to="/account">Account</Link></li>
