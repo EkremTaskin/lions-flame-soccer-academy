@@ -5,9 +5,10 @@ const galleryData = [
     { id: 1, src: 'gallery_1.png', alt: 'Intense Match Action', category: 'Match' },
     { id: 2, src: 'gallery_2.png', alt: 'Precision Drills', category: 'Training' },
     { id: 3, src: 'gallery_3.png', alt: 'Team Spirit', category: 'Team' },
-    { id: 4, src: 'gallery_4.png', alt: 'Expert Coaching', category: 'Coaching' }
-];
-
+    { id: 4, src: 'gallery_4.png', alt: 'Expert Coaching', category: 'Coaching' },
+    { id: 5, src: 'gallery_5.jpg', alt: 'Strategy Session', category: 'Coaching', position: 'center 30%' },
+    { id: 6, src: 'gallery_6.jpg', alt: 'Drill Work', category: 'Training', position: 'center 30%' },
+]
 const Gallery = () => {
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -23,7 +24,12 @@ const Gallery = () => {
                     {galleryData.map((item, index) => (
                         <div key={item.id} className={`gallery-item reveal delay-${index + 1}`} onClick={() => setSelectedImage(item)}>
                             <div className="image-wrapper">
-                                <img src={item.src} alt={item.alt} loading="lazy" />
+                                <img
+                                    src={item.src}
+                                    alt={item.alt}
+                                    loading="lazy"
+                                    style={item.position ? { objectPosition: item.position } : {}}
+                                />
                                 <div className="image-overlay">
                                     <span className="category-tag">{item.category}</span>
                                     <h3>{item.alt}</h3>

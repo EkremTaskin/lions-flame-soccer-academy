@@ -6,7 +6,7 @@ import ig3 from '../assets/instagram/ig_3.png';
 import ig4 from '../assets/instagram/ig_4.png';
 import ig5 from '../assets/instagram/ig_5.png';
 import ig6 from '../assets/instagram/ig_6.png';
-import profilePic from '../assets/instagram/profile_pic.png';
+import profilePic from '../assets/instagram/profile_pic.jpg';
 
 const InstagramFeed = () => {
     const posts = [
