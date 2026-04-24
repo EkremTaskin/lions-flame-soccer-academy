@@ -9,6 +9,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import { getFunctions } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -24,12 +25,14 @@ let app;
 let db;
 let analytics;
 let auth;
+let functions;
 
 try {
   if (firebaseConfig.apiKey) {
     app = initializeApp(firebaseConfig);
     db = getFirestore(app);
     auth = getAuth(app);
+    functions = getFunctions(app, "us-central1");
     // Initialize analytics securely
     if (typeof window !== "undefined") {
       analytics = getAnalytics(app);
@@ -39,4 +42,4 @@ try {
   console.error("Firebase initialization error", error);
 }
 
-export { app, db, auth, analytics };
+export { app, db, auth, analytics, functions };

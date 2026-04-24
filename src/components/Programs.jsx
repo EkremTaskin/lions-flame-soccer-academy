@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Programs.css';
-import imgOneOnOne from '../assets/private_training_img_1769098655307.png';
-import imgSmallGroup from '../assets/small_group_img_1769098675408.png';
-import imgLargeGroup from '../assets/large_group_img_1769098698452.png';
+import imgOneOnOne from '../assets/private_training_img_1769098655307.jfif';
+import imgSmallGroup from '../assets/small_group_img_1769098675408.jpg';
+import imgLargeGroup from '../assets/large_group_img_1769098698452.jpg';
 
 const programsData = [
     {
         title: "One-on-One",
         age: "All Ages",
         image: imgOneOnOne,
+        position: 'center 20%',
         description: "Personalized elite training focused on specific technical weaknesses and rapid improvement. Maximum ball touches and expert attention.",
         level: "Personalized",
         pricing: {
@@ -22,6 +23,7 @@ const programsData = [
         title: "Small Group",
         age: "4–6 Players",
         image: imgSmallGroup,
+        position: 'center 25%',
         description: "High-intensity sessions with 4-6 players. Perfect balance between individualized attention and competitive pressure. *Groups merged (U7-U10, U11-U14) if needed.",
         level: "Elite",
         pricing: {
@@ -57,7 +59,11 @@ const Programs = () => {
                     {programsData.map((program, index) => (
                         <div key={index} className={`program-card reveal delay-${index + 1}`}>
                             <div className="card-image">
-                                <img src={program.image} alt={program.title} />
+                                <img 
+                                    src={program.image} 
+                                    alt={program.title} 
+                                    style={program.position ? { objectPosition: program.position } : {}}
+                                />
                                 <span className="program-level">{program.level}</span>
                             </div>
                             <div className="card-header">

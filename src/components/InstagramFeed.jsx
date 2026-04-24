@@ -1,21 +1,15 @@
 import React from 'react';
 import './InstagramFeed.css';
-import ig1 from '../assets/instagram/ig_1.png';
-import ig2 from '../assets/instagram/ig_2.png';
-import ig3 from '../assets/instagram/ig_3.png';
-import ig4 from '../assets/instagram/ig_4.png';
-import ig5 from '../assets/instagram/ig_5.png';
-import ig6 from '../assets/instagram/ig_6.png';
-import profilePic from '../assets/instagram/profile_pic.jpg';
+import profilePic from '../assets/instagram/ig_profile.jpg';
 
 const InstagramFeed = () => {
     const posts = [
-        { id: 1, img: ig1, likes: '243', comments: '12' },
-        { id: 2, img: ig2, likes: '512', comments: '45' },
-        { id: 3, img: ig3, likes: '189', comments: '8' },
-        { id: 4, img: ig4, likes: '320', comments: '21' },
-        { id: 5, img: ig5, likes: '674', comments: '56' },
-        { id: 6, img: ig6, likes: '432', comments: '34' },
+        { id: 1, img: 'gallery/DJI_20260401195911_0756_D.JPG', likes: '154', comments: '8' },
+        { id: 2, img: 'gallery/DJI_20260401200216_0779_D.JPG', likes: '210', comments: '12' },
+        { id: 3, img: 'gallery/DJI_20260401200659_0811_D.JPG', likes: '189', comments: '5' },
+        { id: 4, img: 'gallery/DJI_20260401201624_0855_D.JPG', likes: '320', comments: '21' },
+        { id: 5, img: 'gallery/IMG_0733.jpg', likes: '145', comments: '9' },
+        { id: 6, img: 'gallery/IMG_0749.jpg', likes: '232', comments: '14' },
     ];
 
     return (
@@ -30,9 +24,9 @@ const InstagramFeed = () => {
                             </div>
                             <div className="ig-user-details">
                                 <div className="ig-username-row">
-                                    <h3 className="ig-username">lionsflameacademy</h3>
+                                    <h3 className="ig-username">lionsflamesocceracademy</h3>
                                     <span className="verified-badge">✔️</span>
-                                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="ig-follow-btn">Follow</a>
+                                    <a href="https://www.instagram.com/lionsflamesocceracademy/" target="_blank" rel="noopener noreferrer" className="ig-follow-btn">Follow</a>
                                 </div>
                                 <div className="ig-stats-row">
                                     <span><strong>128</strong> posts</span>
@@ -43,7 +37,6 @@ const InstagramFeed = () => {
                                     <p className="ig-name">Lions Flame Soccer Academy</p>
                                     <p>⚽ Professional Football Training</p>
                                     <p>🏆 Elite Development & Tactical Excellence</p>
-                                    <a href="#" className="ig-link">linktr.ee/lionsflame</a>
                                 </div>
                             </div>
                         </div>

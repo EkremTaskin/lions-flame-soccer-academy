@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { submitContactForm } from '../utils/mockApi';
+import { submitContactForm } from '../utils/bookingApi';
 import logo from '../assets/lions-flame-logo.png';
 import './Contact.css';
 
@@ -71,8 +71,8 @@ const Contact = () => {
                         <div className="info-card">
                             <span className="icon">📞</span>
                             <div className="info-card-content">
-                                <h3>Call Us</h3>
-                                <p>+1 (555) 123-4567</p>
+                                 <h3>Call Us</h3>
+                                <p><a href="tel:+14692230058" className="contact-link">+1 (469) 223-0058</a></p>
                                 <p className="sub-info">Mon-Fri, 9am - 6pm</p>
                             </div>
                         </div>
@@ -80,8 +80,8 @@ const Contact = () => {
                         <div className="info-card">
                             <span className="icon">✉️</span>
                             <div className="info-card-content">
-                                <h3>Email</h3>
-                                <p>info@lionsflame.academy</p>
+                                 <h3>Email</h3>
+                                <p><a href="mailto:lionsflamesocceracademy@gmail.com" className="contact-link">lionsflamesocceracademy@gmail.com</a></p>
                                 <p className="sub-info">Replies in 24 hrs</p>
                             </div>
                         </div>
@@ -90,8 +90,8 @@ const Contact = () => {
                         <div className="social-container text-center">
                             <h3>Follow The Pride</h3>
                             <div className="social-links">
-                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon">Instagram</a>
-                                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon">Facebook</a>
+                                <a href="https://www.instagram.com/lionsflamesocceracademy/" target="_blank" rel="noopener noreferrer" className="social-icon">Instagram</a>
+                                <a href="https://www.facebook.com/profile.php?id=61587896511048&mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="social-icon">Facebook</a>
                             </div>
                         </div>
                     </div>
@@ -132,8 +132,8 @@ const Contact = () => {
                         <h3>Contact Us</h3>
                         <ul className="footer-contact-list">
                             <li><span>📍</span> Location: Coming Soon</li>
-                            <li><span>📞</span> +1 (555) 123-4567</li>
-                            <li><span>✉️</span> info@lionsflame.academy</li>
+                            <li><span>📞</span> <a href="tel:+14692230058">+1 (469) 223-0058</a></li>
+                            <li><span>✉️</span> <a href="mailto:lionsflamesocceracademy@gmail.com">lionsflamesocceracademy@gmail.com</a></li>
                         </ul>
                     </div>
                 </div>

@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import './Gallery.css';
 
 const galleryData = [
-    { id: 1, src: 'gallery_1.png', alt: 'Intense Match Action', category: 'Match' },
-    { id: 2, src: 'gallery_2.png', alt: 'Precision Drills', category: 'Training' },
-    { id: 3, src: 'gallery_3.png', alt: 'Team Spirit', category: 'Team' },
-    { id: 4, src: 'gallery_4.png', alt: 'Expert Coaching', category: 'Coaching' },
-    { id: 5, src: 'gallery_5.jpg', alt: 'Strategy Session', category: 'Coaching', position: 'center 30%' },
-    { id: 6, src: 'gallery_6.jpg', alt: 'Drill Work', category: 'Training', position: 'center 30%' },
+    { id: 1, src: 'gallery/DJI_20260401195911_0756_D.JPG', alt: 'Academy Selection 1', category: 'Academy' },
+    { id: 2, src: 'gallery/DJI_20260401200216_0779_D.JPG', alt: 'Academy Selection 2', category: 'Academy' },
+    { id: 3, src: 'gallery/DJI_20260401200659_0811_D.JPG', alt: 'Academy Selection 3', category: 'Academy' },
+    { id: 4, src: 'gallery/DJI_20260401201624_0855_D.JPG', alt: 'Academy Selection 4', category: 'Academy' },
+    { id: 5, src: 'gallery/IMG_0733.jpg', alt: 'Academy Selection 5', category: 'Academy' },
+    { id: 6, src: 'gallery/IMG_0749.jpg', alt: 'Academy Selection 6', category: 'Academy' },
+    { id: 7, src: 'gallery/IMG_0782.jpg', alt: 'Academy Selection 7', category: 'Academy' },
 ]
 const Gallery = () => {
     const [selectedImage, setSelectedImage] = useState(null);

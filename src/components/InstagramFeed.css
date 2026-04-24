@@ -36,6 +36,7 @@
     border: 1px solid #dbdbdb;
     padding: 4px;
     background: #fff;
+    transform: scale(1.1);
 }
 
 .ig-user-details {

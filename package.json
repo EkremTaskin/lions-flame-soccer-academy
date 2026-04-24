@@ -8,6 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "firebase:deploy:functions": "firebase deploy --only functions",
+    "firebase:emulate:functions": "firebase emulators:start --only functions",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
