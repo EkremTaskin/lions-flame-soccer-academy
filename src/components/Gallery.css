@@ -1,12 +1,12 @@
 .gallery-section {
-    padding: 8rem 0;
+    padding: var(--section-space) 0;
     background-color: white;
 }
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: clamp(0.9rem, 2vw, 1.5rem);
 }
 
 .gallery-item {
@@ -152,7 +152,19 @@
 }
 
 @media (max-width: 768px) {
+    .gallery-section {
+        padding: var(--section-space-sm) 0;
+    }
+
     .gallery-grid {
         grid-template-columns: 1fr;
+    }
+
+    .lightbox {
+        padding: 1rem;
+    }
+
+    .close-btn {
+        right: 0;
     }
 }

@@ -1,5 +1,5 @@
 .instagram-section {
-    padding: 100px 0;
+    padding: var(--section-space) 0;
     background-color: var(--dark-accent);
 }
 
@@ -8,6 +8,7 @@
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
     max-width: 1000px;
+    width: 100%;
     margin: 0 auto;
     overflow: hidden;
     padding-bottom: 40px;
@@ -15,13 +16,13 @@
 
 /* Header Mockup */
 .ig-mockup-header {
-    padding: 40px 60px 20px;
+    padding: clamp(1.25rem, 4vw, 40px) clamp(1rem, 5vw, 60px) 20px;
 }
 
 .ig-profile-info {
     display: flex;
     align-items: center;
-    gap: 60px;
+    gap: clamp(1.25rem, 5vw, 60px);
 }
 
 .ig-avatar-wrapper {
@@ -29,8 +30,8 @@
 }
 
 .ig-avatar {
-    width: 150px;
-    height: 150px;
+    width: clamp(80px, 12vw, 150px);
+    height: clamp(80px, 12vw, 150px);
     border-radius: 50%;
     object-fit: cover;
     border: 1px solid #dbdbdb;
@@ -47,11 +48,13 @@
     display: flex;
     align-items: center;
     gap: 20px;
+    flex-wrap: wrap;
     margin-bottom: 20px;
 }
 
 .ig-username {
-    font-size: 1.8rem;
+    font-size: clamp(1rem, 2.2vw, 1.8rem);
+    overflow-wrap: anywhere;
     font-weight: 300;
     color: #262626;
     text-transform: none;
@@ -79,7 +82,8 @@
 
 .ig-stats-row {
     display: flex;
-    gap: 40px;
+    gap: clamp(1rem, 4vw, 40px);
+    flex-wrap: wrap;
     margin-bottom: 20px;
     font-size: 1rem;
     color: #262626;
@@ -109,7 +113,7 @@
 .ig-tabs {
     display: flex;
     justify-content: center;
-    gap: 60px;
+    gap: clamp(1.5rem, 6vw, 60px);
     border-top: 1px solid #dbdbdb;
     margin-bottom: 20px;
 }
@@ -142,8 +146,8 @@
 .instagram-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
-    padding: 0 60px;
+    gap: clamp(0.4rem, 2vw, 28px);
+    padding: 0 clamp(0.5rem, 5vw, 60px);
 }
 
 .instagram-item {
@@ -208,6 +212,15 @@
 }
 
 @media (max-width: 600px) {
+    .instagram-section {
+        padding: var(--section-space-sm) 0;
+    }
+
+    .instagram-browser-mockup {
+        border-radius: 12px;
+        padding-bottom: 16px;
+    }
+
     .ig-profile-info {
         flex-direction: column;
         align-items: flex-start;
@@ -219,7 +232,7 @@
     }
 
     .ig-stats-row {
-        gap: 20px;
+        gap: 12px;
         font-size: 0.9rem;
     }
 

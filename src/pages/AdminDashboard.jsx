@@ -1,11 +1,12 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import React, { useEffect, useState } from 'react';
-import { addDoc, collection, deleteDoc, doc, getDocs, query } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc } from 'firebase/firestore';
 import { toast } from 'sonner';
 import Navbar from '../components/Navbar';
 import Loader from '../components/Loader';
 import { db } from '../firebase';
 import { fetchAvailableSlots } from '../utils/bookingApi';
-import { BOOKING_STATUSES, buildBookingRecord } from '../../shared/bookingConfig';
+import { BOOKING_STATUSES, buildBookingRecord, getBookingStatusLabel } from '../../shared/bookingConfig';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -16,6 +17,7 @@ const AdminDashboard = () => {
   const [blockTime, setBlockTime] = useState('');
   const [availableSlots, setAvailableSlots] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('all');
 
   const fetchAllBookings = async () => {
     try {
@@ -114,10 +116,41 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleUpdateBookingStatus = async (id, status) => {
+    try {
+      await updateDoc(doc(db, 'bookings', id), {
+        status,
+        paymentStatus: status === BOOKING_STATUSES.confirmed ? 'paid' : status,
+        updatedAt: new Date().toISOString(),
+      });
+      toast.success(`Booking marked as ${getBookingStatusLabel(status)}.`);
+      fetchAllBookings();
+    } catch (error) {
+      console.error('Error updating booking status:', error);
+      toast.error('Failed to update booking status.');
+    }
+  };
+
   const totalRevenue = allBookings.reduce(
-    (sum, booking) => sum + (Number(booking.amount ?? booking.price) || 0),
+    (sum, booking) => (
+      [BOOKING_STATUSES.confirmed, BOOKING_STATUSES.paid].includes(booking.status)
+        ? sum + (Number(booking.amount ?? booking.price) || 0)
+        : sum
+    ),
     0,
   );
+
+  const filteredBookings = allBookings.filter((booking) => {
+    if (activeFilter === 'all') return true;
+    if (activeFilter === 'blocked') return Boolean(booking.isBlocked);
+    if (activeFilter === 'pending') {
+      return !booking.isBlocked && [BOOKING_STATUSES.pending, BOOKING_STATUSES.paymentSubmitted].includes(booking.status);
+    }
+    if (activeFilter === 'confirmed') {
+      return !booking.isBlocked && [BOOKING_STATUSES.confirmed, BOOKING_STATUSES.paid].includes(booking.status);
+    }
+    return true;
+  });
 
   return (
     <>
@@ -161,27 +194,46 @@ const AdminDashboard = () => {
                 <h4 style={{ marginBottom: '1rem', color: 'var(--secondary)' }}>
                   All Records (Sorted by Newest)
                 </h4>
+                <div className="admin-filters" aria-label="Booking filters">
+                  {[
+                    { id: 'all', label: 'All' },
+                    { id: 'pending', label: 'Pending' },
+                    { id: 'confirmed', label: 'Confirmed' },
+                    { id: 'blocked', label: 'Blocked Slots' },
+                  ].map((filter) => (
+                    <button
+                      key={filter.id}
+                      type="button"
+                      className={activeFilter === filter.id ? 'active' : ''}
+                      onClick={() => setActiveFilter(filter.id)}
+                    >
+                      {filter.label}
+                    </button>
+                  ))}
+                </div>
 
                 {loadingBookings ? (
                   <div className="text-center p-5">
                     <Loader size="default" />
                     <p style={{ marginTop: '1rem', color: '#666' }}>Fetching data...</p>
                   </div>
-                ) : allBookings.length > 0 ? (
+                ) : filteredBookings.length > 0 ? (
                   <div className="table-responsive">
                     <table className="admin-table">
                       <thead>
                         <tr>
                           <th>Customer / Role</th>
+                          <th>Player</th>
                           <th>Program</th>
                           <th>Date</th>
                           <th>Time</th>
+                          <th>Status</th>
                           <th>Price</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {allBookings.map((booking) => (
+                        {filteredBookings.map((booking) => (
                           <tr key={booking.id} className={booking.isBlocked ? 'blocked-row' : ''}>
                             <td>
                               <span className={`badge-email ${booking.isBlocked ? 'badge-blocked' : ''}`}>
@@ -189,30 +241,54 @@ const AdminDashboard = () => {
                               </span>
                             </td>
                             <td>
+                              {booking.customerDetails?.playerName ? (
+                                <>
+                                  <strong>{booking.customerDetails.playerName}</strong>
+                                  <div style={{ fontSize: '12px', color: '#666' }}>
+                                    Age {booking.customerDetails.playerAge || '-'} | {booking.customerDetails.parentPhone || 'No phone'}
+                                  </div>
+                                </>
+                              ) : (
+                                '-'
+                              )}
+                            </td>
+                            <td>
                               <strong>{booking.program}</strong>
                             </td>
                             <td>{booking.date}</td>
                             <td>{booking.time}</td>
+                            <td>
+                              <span className={`booking-status status-${booking.status || BOOKING_STATUSES.pending}`}>
+                                {booking.isBlocked ? 'Blocked' : getBookingStatusLabel(booking.status)}
+                              </span>
+                            </td>
                             <td>
                               <strong style={{ color: booking.isBlocked ? '#666' : '#2e7d32' }}>
                                 ${booking.amount ?? booking.price}.00
                               </strong>
                             </td>
                             <td>
-                              <button
-                                onClick={() => handleDeleteBooking(booking.id)}
-                                style={{
-                                  padding: '5px 10px',
-                                  fontSize: '12px',
-                                  borderRadius: '4px',
-                                  background: '#ff5252',
-                                  color: 'white',
-                                  border: 'none',
-                                  cursor: 'pointer',
-                                }}
-                              >
-                                Delete
-                              </button>
+                              <div className="admin-actions">
+                                {!booking.isBlocked && ![BOOKING_STATUSES.confirmed, BOOKING_STATUSES.paid].includes(booking.status) && (
+                                  <button
+                                    className="action-confirm"
+                                    onClick={() => handleUpdateBookingStatus(booking.id, BOOKING_STATUSES.confirmed)}
+                                  >
+                                    Confirm
+                                  </button>
+                                )}
+                                {!booking.isBlocked && booking.status !== BOOKING_STATUSES.cancelled && (
+                                  <button
+                                    className="action-cancel"
+                                    onClick={() => handleUpdateBookingStatus(booking.id, BOOKING_STATUSES.cancelled)}
+                                  >
+                                    Cancel
+                                  </button>
+                                )}
+                                <button className="action-delete" onClick={() => handleDeleteBooking(booking.id)}>
+                                  Delete
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Programs.css';
-import imgOneOnOne from '../assets/private_training_img_1769098655307.jfif';
+import imgOneOnOne from '../assets/optimized/private_training.jpg';
 import imgSmallGroup from '../assets/small_group_img_1769098675408.jpg';
 import imgLargeGroup from '../assets/large_group_img_1769098698452.jpg';
 
@@ -62,6 +62,7 @@ const Programs = () => {
                                 <img 
                                     src={program.image} 
                                     alt={program.title} 
+                                    loading="lazy"
                                     style={program.position ? { objectPosition: program.position } : {}}
                                 />
                                 <span className="program-level">{program.level}</span>

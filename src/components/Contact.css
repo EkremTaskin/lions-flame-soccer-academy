@@ -1,5 +1,5 @@
 .contact-section {
-    padding: 8rem 0 0;
+    padding: var(--section-space) 0 0;
     background-color: white;
 }
 
@@ -17,7 +17,7 @@
 
 .info-card {
     background: #f9f9f9;
-    padding: 1.75rem 2rem;
+    padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1rem, 3vw, 2rem);
     border-radius: 20px;
     border: 1px solid #eee;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -83,6 +83,7 @@
 .social-links {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 2rem;
 }
 
@@ -108,8 +109,8 @@
 
 .footer-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1.5fr;
-    gap: 4rem;
+    grid-template-columns: minmax(220px, 2fr) repeat(2, minmax(140px, 1fr)) minmax(200px, 1.5fr);
+    gap: clamp(2rem, 4vw, 4rem);
     padding-bottom: 4rem;
 }
 
@@ -145,6 +146,7 @@
     transition: color 0.3s;
     font-size: 0.95rem;
     text-decoration: none;
+    overflow-wrap: anywhere;
 }
 
 .footer-col ul li a:hover {
@@ -172,6 +174,7 @@
     gap: 1rem;
     color: #888;
     font-size: 0.95rem;
+    min-width: 0;
 }
 
 .footer-contact-list li span {
@@ -200,7 +203,7 @@
     }
 
     .contact-section {
-        padding: 5rem 0 0;
+        padding: var(--section-space-sm) 0 0;
     }
 }
 
@@ -219,8 +222,8 @@
 /* Contact Form Grid and Elements */
 .contact-layout {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 3rem;
+    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
     max-width: 1200px;
     margin: 0 auto 4rem;
     align-items: start;
@@ -228,7 +231,7 @@
 
 .contact-form-container {
     background: #f9f9f9;
-    padding: 3rem;
+    padding: clamp(1.25rem, 4vw, 3rem);
     border-radius: 20px;
     border: 1px solid #eee;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
@@ -277,5 +280,23 @@
 @media (max-width: 968px) {
     .contact-layout {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .info-card {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.75rem;
+        border-radius: 14px;
+    }
+
+    .social-container {
+        padding: 1.25rem;
+        border-radius: 14px;
+    }
+
+    .footer-v2 {
+        padding-top: 4rem;
     }
 }

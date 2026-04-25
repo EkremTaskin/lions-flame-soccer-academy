@@ -1,5 +1,5 @@
 .login-page {
-    padding: 8rem 0;
+    padding: clamp(6rem, 10vw, 8rem) var(--page-padding) var(--section-space-sm);
     min-height: 100vh;
     background: #f4f6f9;
     display: flex;
@@ -9,8 +9,8 @@
 
 .login-card {
     background: white;
-    padding: 3rem;
-    border-radius: 20px;
+    padding: clamp(1.5rem, 5vw, 3rem);
+    border-radius: clamp(14px, 3vw, 20px);
     box-shadow: 0 10px 40px rgba(0,0,0,0.08);
     max-width: 500px;
     width: 100%;
@@ -19,7 +19,7 @@
 
 .login-card h2 {
     color: var(--secondary);
-    font-size: 2rem;
+    font-size: clamp(1.55rem, 4vw, 2rem);
     margin-bottom: 0.5rem;
 }
 

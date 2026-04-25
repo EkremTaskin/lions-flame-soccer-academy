@@ -16,6 +16,11 @@ initializeApp();
 const db = getFirestore();
 const stripeSecretKey = defineSecret('STRIPE_SECRET_KEY');
 const stripeWebhookSecret = defineSecret('STRIPE_WEBHOOK_SECRET');
+const callableFunctionOptions = {
+  region: 'us-central1',
+  cors: true,
+  secrets: [stripeSecretKey],
+};
 
 function getStripeClient() {
   return new Stripe(stripeSecretKey.value());
@@ -67,7 +72,7 @@ async function markBookingPaid(bookingId, session) {
 }
 
 export const createCheckoutSession = onCall(
-  { region: 'us-central1', secrets: [stripeSecretKey] },
+  callableFunctionOptions,
   async (request) => {
     if (!request.auth) {
       throw new HttpsError('unauthenticated', 'You must be logged in to book a session.');
@@ -183,7 +188,7 @@ export const createCheckoutSession = onCall(
 );
 
 export const getCheckoutSessionStatus = onCall(
-  { region: 'us-central1', secrets: [stripeSecretKey] },
+  callableFunctionOptions,
   async (request) => {
     if (!request.auth) {
       throw new HttpsError('unauthenticated', 'You must be logged in to check payment status.');

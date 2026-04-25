@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import About from '../components/About';
 import Programs from '../components/Programs';
+import TrainingInfo from '../components/TrainingInfo';
 import Gallery from '../components/Gallery';
 import Testimonials from '../components/Testimonials';
 import FAQ from '../components/FAQ';
@@ -99,6 +100,7 @@ const Home = () => {
                     const rotateY = (centerX - x) / 25;
 
                     gsap.to(card, {
+                        rotateX: rotateX,
                         rotateY: rotateY,
                         transformPerspective: 1000,
                         duration: 0.5,
@@ -128,6 +130,7 @@ const Home = () => {
             <Hero />
             <About />
             <Programs />
+            <TrainingInfo />
             <Gallery />
             <Testimonials />
             <FAQ />

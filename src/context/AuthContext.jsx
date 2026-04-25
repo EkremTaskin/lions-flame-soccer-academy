@@ -14,12 +14,11 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [userRole, setUserRole] = useState(null); // 'user' or 'admin'
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(Boolean(auth));
 
     useEffect(() => {
         let mounted = true;
         if (!auth) {
-            if (mounted) setLoading(false);
             return;
         }
 

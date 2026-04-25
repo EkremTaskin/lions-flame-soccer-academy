@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { auth, db } from '../firebase';
 import { updatePassword, signOut } from 'firebase/auth';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import Navbar from '../components/Navbar';
 import { toast } from 'sonner';
 import Loader from '../components/Loader';
 import '../components/Loader.css';
 import './Account.css';
+import { BOOKING_STATUSES, getBookingStatusLabel } from '../../shared/bookingConfig';
 
 const Account = () => {
     const { currentUser, userRole } = useAuth();
@@ -118,9 +119,11 @@ const Account = () => {
                                         <thead>
                                             <tr>
                                                 <th>Program</th>
+                                                <th>Player</th>
                                                 <th>Date</th>
                                                 <th>Time</th>
                                                 <th>Duration</th>
+                                                <th>Status</th>
                                                 <th>Price</th>
                                             </tr>
                                         </thead>
@@ -128,10 +131,16 @@ const Account = () => {
                                             {bookings.map(book => (
                                                 <tr key={book.id}>
                                                     <td><strong>{book.program}</strong></td>
+                                                    <td>{book.customerDetails?.playerName || '-'}</td>
                                                     <td>{book.date}</td>
                                                     <td>{book.time}</td>
                                                     <td>{book.duration} Min</td>
-                                                    <td>${book.price}.00</td>
+                                                    <td>
+                                                        <span className={`booking-status status-${book.status || BOOKING_STATUSES.pending}`}>
+                                                            {getBookingStatusLabel(book.status)}
+                                                        </span>
+                                                    </td>
+                                                    <td>${book.amount ?? book.price}.00</td>
                                                 </tr>
                                             ))}
                                         </tbody>

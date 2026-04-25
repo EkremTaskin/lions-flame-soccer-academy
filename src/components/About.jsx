@@ -24,6 +24,20 @@ const About = () => {
                             helping young athletes reach their full potential, Caglayan combines proven coaching methods
                             with a love for the game to inspire growth both on and off the field.
                         </p>
+                        <div className="credential-grid" aria-label="Coach credentials">
+                            <div>
+                                <strong>US Soccer D License</strong>
+                                <span>Certified youth coach</span>
+                            </div>
+                            <div>
+                                <strong>Player-first development</strong>
+                                <span>Technical, tactical, and confidence building</span>
+                            </div>
+                            <div>
+                                <strong>Age-appropriate sessions</strong>
+                                <span>Structured for U7-U14 players</span>
+                            </div>
+                        </div>
                         
                         <div className="coached-teams mt-4">
                             <h4 className="text-primary" style={{fontSize: '1.2rem', marginBottom: '0.8rem'}}>Teams Coached:</h4>

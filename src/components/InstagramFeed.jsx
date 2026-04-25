@@ -4,12 +4,12 @@ import profilePic from '../assets/instagram/ig_profile.jpg';
 
 const InstagramFeed = () => {
     const posts = [
-        { id: 1, img: 'gallery/DJI_20260401195911_0756_D.JPG', likes: '154', comments: '8' },
-        { id: 2, img: 'gallery/DJI_20260401200216_0779_D.JPG', likes: '210', comments: '12' },
-        { id: 3, img: 'gallery/DJI_20260401200659_0811_D.JPG', likes: '189', comments: '5' },
-        { id: 4, img: 'gallery/DJI_20260401201624_0855_D.JPG', likes: '320', comments: '21' },
-        { id: 5, img: 'gallery/IMG_0733.jpg', likes: '145', comments: '9' },
-        { id: 6, img: 'gallery/IMG_0749.jpg', likes: '232', comments: '14' },
+        { id: 1, img: 'gallery/optimized/DJI_20260401195911_0756_D.jpg', likes: '154', comments: '8' },
+        { id: 2, img: 'gallery/optimized/DJI_20260401200216_0779_D.jpg', likes: '210', comments: '12' },
+        { id: 3, img: 'gallery/optimized/DJI_20260401200659_0811_D.jpg', likes: '189', comments: '5' },
+        { id: 4, img: 'gallery/optimized/DJI_20260401201624_0855_D.jpg', likes: '320', comments: '21' },
+        { id: 5, img: 'gallery/optimized/IMG_0733.jpg', likes: '145', comments: '9' },
+        { id: 6, img: 'gallery/optimized/IMG_0749.jpg', likes: '232', comments: '14' },
     ];
 
     return (
@@ -53,7 +53,7 @@ const InstagramFeed = () => {
                     <div className="instagram-grid">
                         {posts.map((post) => (
                             <div key={post.id} className="instagram-item">
-                                <img src={post.img} alt={`Lions Flame Instagram Post ${post.id}`} />
+                                <img src={post.img} alt={`Lions Flame Instagram Post ${post.id}`} loading="lazy" />
                                 <div className="instagram-overlay">
                                     <div className="overlay-content">
                                         <span>❤️ {post.likes}</span>

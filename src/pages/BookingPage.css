@@ -1,6 +1,6 @@
 .booking-page {
-    padding-top: 120px;
-    padding-bottom: 8rem;
+    padding-top: clamp(96px, 11vw, 120px);
+    padding-bottom: var(--section-space);
     background-color: #f9f9f9;
     /* Light gray background for contrast with cards */
     min-height: 100vh;
@@ -12,11 +12,11 @@
 
 .booking-header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: clamp(2rem, 5vw, 4rem);
 }
 
 .booking-header h1 {
-    font-size: 3rem;
+    font-size: clamp(2rem, 5vw, 3rem);
     margin-bottom: 1rem;
     color: #121212;
 }
@@ -28,15 +28,15 @@
 
 .booking-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+    gap: clamp(1rem, 3vw, 2rem);
     align-items: start;
 }
 
 .booking-step {
     background: white;
-    padding: 2.5rem;
-    border-radius: 20px;
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    border-radius: clamp(14px, 2vw, 20px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     border: 1px solid #eee;
     transition: all 0.3s ease;
@@ -69,7 +69,7 @@
 }
 
 .step-header h2 {
-    font-size: 1.5rem;
+    font-size: clamp(1.15rem, 2.5vw, 1.5rem);
     margin: 0;
     color: #121212;
 }
@@ -82,12 +82,12 @@
 }
 
 .program-select-btn {
-    padding: 1.5rem;
+    padding: clamp(1rem, 2.5vw, 1.5rem);
     border: 2px solid #eee;
     border-radius: 12px;
     background: white;
     font-family: var(--font-head);
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
     color: #121212;
     transition: all 0.3s ease;
     text-align: left;
@@ -203,7 +203,8 @@
 }
 
 /* Payment Form */
-.payment-form input {
+.payment-form input,
+.payment-form textarea {
     width: 100%;
     padding: 1rem;
     border: 1px solid #ddd;
@@ -213,8 +214,22 @@
     font-size: 1rem;
 }
 
-.payment-form input::placeholder {
+.payment-form textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.payment-form input::placeholder,
+.payment-form textarea::placeholder {
     color: #aaa;
+}
+
+.payment-form .summary-card .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.payment-form .form-group.compact {
+    margin-bottom: 0;
 }
 
 .form-row {
@@ -242,9 +257,15 @@
 .summary-row {
     display: flex;
     justify-content: space-between;
+    gap: 1rem;
     margin-bottom: 0.75rem;
     font-size: 0.95rem;
     color: #555;
+}
+
+.summary-row span:last-child,
+.summary-row strong:last-child {
+    text-align: right;
 }
 
 .summary-row.total {
@@ -309,11 +330,7 @@
 @media (max-width: 768px) {
     .booking-page {
         padding-top: 100px;
-        padding-bottom: 4rem;
-    }
-
-    .booking-header h1 {
-        font-size: 2.2rem;
+        padding-bottom: var(--section-space-sm);
     }
 
     .booking-grid {
@@ -322,6 +339,15 @@
 
     .booking-step {
         padding: 1.5rem;
+        border-radius: 14px;
+    }
+
+    .duration-select {
+        grid-template-columns: 1fr;
+    }
+
+    .slots-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .booking-success {
@@ -335,16 +361,24 @@
 }
 
 @media (max-width: 480px) {
-    .booking-header h1 {
-        font-size: 1.8rem;
-    }
-
     .step-header {
+        align-items: flex-start;
         gap: 1rem;
         margin-bottom: 1.5rem;
     }
 
     .step-header h2 {
         font-size: 1.2rem;
+    }
+
+    .selected-tag,
+    .summary-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .summary-row span:last-child,
+    .summary-row strong:last-child {
+        text-align: left;
     }
 }

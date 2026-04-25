@@ -8,7 +8,15 @@ const faqData = [
     },
     {
         question: "What age groups do you cater to?",
-        answer: "We offer programs for children aged 6 to 18. Our sessions are divided into specific age brackets (Little Cubs: 6-9, Youth: 10-14, Pro: 15-18) to ensure age-appropriate development and fair competition."
+        answer: "Our core academy training is designed for players ages 6 to 14. Sessions are adjusted by age, ability, and confidence level so each player receives an appropriate challenge."
+    },
+    {
+        question: "Where do training sessions take place?",
+        answer: "Sessions are scheduled around the Wylie, TX area. Exact field details are confirmed after booking so families have the latest arrival and parking information."
+    },
+    {
+        question: "How does the first session work?",
+        answer: "The first session includes a player evaluation, technical work, and a short parent summary. We use it to understand the player's goals and recommend the best training path."
     },
     {
         question: "What happens in case of bad weather?",
@@ -21,6 +29,10 @@ const faqData = [
     {
         question: "Do you offer sibling discounts?",
         answer: "Absolutely! We offer a 15% discount for the second child and 20% for any additional siblings enrolled in the same term. Please contact us directly to apply this to your booking."
+    },
+    {
+        question: "What is the cancellation policy?",
+        answer: "Please contact us as early as possible if you need to cancel or reschedule. Weather-related changes are rescheduled for safety, and missed sessions are reviewed case by case."
     }
 ];
 

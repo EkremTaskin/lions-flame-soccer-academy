@@ -15,6 +15,9 @@
   --nav-bg: #121212;
   /* Navbar background remains black */
   --nav-text: #ffffff;
+  --page-padding: clamp(1rem, 4vw, 2rem);
+  --section-space: clamp(4.5rem, 8vw, 8rem);
+  --section-space-sm: clamp(3rem, 6vw, 5rem);
 }
 
 * {
@@ -29,6 +32,11 @@ body {
   color: var(--light);
   overflow-x: hidden;
   line-height: 1.6;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 96px;
 }
 
 h1,
@@ -60,12 +68,51 @@ button {
 .container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 var(--page-padding);
+  width: 100%;
 }
 
 img {
   max-width: 100%;
   display: block;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4.5vw, 3rem);
+}
+
+.section-subtitle {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --page-padding: 1rem;
+  }
+
+  body {
+    font-size: 0.96rem;
+  }
+
+  .btn-primary,
+  .btn-outline,
+  .btn-outline-dark,
+  .btn-program {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
 }
 
 /* Utilities */

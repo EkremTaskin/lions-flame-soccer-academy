@@ -1,18 +1,18 @@
 .testimonials-section {
-    padding: 8rem 0;
+    padding: var(--section-space) 0;
     background-color: var(--dark-accent);
 }
 
 .testimonials-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: clamp(1rem, 2.5vw, 2rem);
 }
 
 .testimonial-card {
     background: white;
-    padding: 3rem;
-    border-radius: 20px;
+    padding: clamp(1.5rem, 3vw, 3rem);
+    border-radius: clamp(14px, 2vw, 20px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     border: 1px solid #eee;
     transition: transform 0.3s ease;
@@ -55,6 +55,10 @@
 }
 
 @media (max-width: 768px) {
+    .testimonials-section {
+        padding: var(--section-space-sm) 0;
+    }
+
     .testimonial-card {
         padding: 2rem;
     }

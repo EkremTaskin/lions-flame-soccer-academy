@@ -1,13 +1,13 @@
 .admin-dashboard-page {
-    padding: 8rem 0;
+    padding: var(--section-space) 0;
     min-height: 100vh;
     background: #f4f6f9;
 }
 
 .admin-card {
     background: white;
-    padding: 2rem;
-    border-radius: 20px;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border-radius: clamp(14px, 3vw, 20px);
     box-shadow: 0 10px 40px rgba(0,0,0,0.08);
     margin: 0 auto;
 }
@@ -22,7 +22,7 @@
 }
 
 .admin-header h2 {
-    font-size: 2rem;
+    font-size: clamp(1.4rem, 3vw, 2rem);
     margin: 0;
 }
 
@@ -62,6 +62,7 @@
     overflow-x: auto;
     border-radius: 8px;
     border: 1px solid #eaeaea;
+    -webkit-overflow-scrolling: touch;
 }
 
 .admin-table {
@@ -115,9 +116,119 @@
     color: white !important;
 }
 
+.admin-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.admin-filters button {
+    border: 1px solid #ddd;
+    background: white;
+    color: #444;
+    padding: 0.65rem 1rem;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.admin-filters button.active {
+    background: var(--secondary);
+    border-color: var(--secondary);
+    color: white;
+}
+
+.booking-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.status-pending {
+    background: #fff8e1;
+    color: #8a5a00;
+}
+
+.status-payment_submitted {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+.status-confirmed,
+.status-paid {
+    background: #e8f5e9;
+    color: #1b5e20;
+}
+
+.status-cancelled,
+.status-expired {
+    background: #ffebee;
+    color: #b71c1c;
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.admin-actions button {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.78rem;
+    border-radius: 6px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.action-confirm {
+    background: #2e7d32;
+}
+
+.action-cancel {
+    background: #ef6c00;
+}
+
+.action-delete {
+    background: #d32f2f;
+}
+
 @media (max-width: 992px) {
     .admin-grid {
         grid-template-columns: 1fr !important;
     }
 }
 
+@media (max-width: 768px) {
+    .admin-dashboard-page {
+        padding: var(--section-space-sm) 0;
+    }
+
+    .admin-card {
+        padding: 1.25rem;
+        border-radius: 14px;
+    }
+
+    .admin-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .admin-stats {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-box {
+        padding: 0.9rem;
+    }
+}

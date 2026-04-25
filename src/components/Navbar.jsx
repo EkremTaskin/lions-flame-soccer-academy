@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from '../assets/lions-flame-logo.png';
 import { useAuth } from '../context/AuthContext';
-import { auth } from '../firebase';
-import { signOut } from 'firebase/auth';
 import './Navbar.css';
+
+const UserIcon = () => (
+  <svg className="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="8" r="3.25" />
+    <path d="M5.5 19c1.2-3.2 3.4-4.8 6.5-4.8s5.3 1.6 6.5 4.8" />
+  </svg>
+);
+
+const ShoppingBagIcon = () => (
+  <svg className="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M6.5 8.5h11l-.8 10.2a2 2 0 0 1-2 1.8H9.3a2 2 0 0 1-2-1.8L6.5 8.5Z" />
+    <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" />
+  </svg>
+);
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const { currentUser, isAdmin } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-        await signOut(auth);
-        navigate('/');
-    } catch (error) {
-        console.error('Logout error', error);
-    }
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,26 +60,23 @@ const Navbar = () => {
             <li><Link to="/#about" onClick={(e) => handleLinkClick(e, '#about')}>Coach</Link></li>
             <li><Link to="/#programs" onClick={(e) => handleLinkClick(e, '#programs')}>Programs</Link></li>
             <li><Link to="/#gallery" onClick={(e) => handleLinkClick(e, '#gallery')}>Gallery</Link></li>
-            <li><Link to="/#testimonials" onClick={(e) => handleLinkClick(e, '#testimonials')}>Stories</Link></li>
-            <li><Link to="/shop">Shop</Link></li>
             {isAdmin && <li><Link to="/admin">Admin</Link></li>}
           </ul>
-          <Link to="/#contact" className="btn-primary mobile-btn" onClick={(e) => handleLinkClick(e, '#contact')}>Contact us!</Link>
+          <Link to="/book" className="btn-primary mobile-btn" onClick={closeMenu}>Book Session</Link>
         </div>
 
         <div className="nav-actions">
           {currentUser ? (
             <Link to="/account" className="nav-user-link">
-              <span className="icon">👤</span> Account
+              <UserIcon /> Account
             </Link>
           ) : (
             <Link to="/login" className="nav-user-link">
-              <span className="icon">👤</span> Log In
+              <UserIcon /> Log In
             </Link>
           )}
-          <Link to="/shop" className="nav-cart-btn">
-            <span className="icon">🛒</span>
-            <span className="cart-badge">0</span>
+          <Link to="/shop" className="nav-cart-btn" aria-label="Shop coming soon">
+            <ShoppingBagIcon />
           </Link>
           
           <button className={`hamburger ${isActive ? 'active' : ''}`} onClick={toggleMenu} aria-label="Menu">
@@ -86,7 +85,7 @@ const Navbar = () => {
             <span></span>
           </button>
 
-          <Link to="/#contact" className="btn-primary desktop-btn" onClick={(e) => handleLinkClick(e, '#contact')}>Contact us!</Link>
+          <Link to="/book" className="btn-primary desktop-btn">Book Session</Link>
         </div>
       </div>
     </nav>

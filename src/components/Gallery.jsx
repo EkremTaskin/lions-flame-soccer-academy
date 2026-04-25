@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import './Gallery.css';
 
 const galleryData = [
-    { id: 1, src: 'gallery/DJI_20260401195911_0756_D.JPG', alt: 'Academy Selection 1', category: 'Academy' },
-    { id: 2, src: 'gallery/DJI_20260401200216_0779_D.JPG', alt: 'Academy Selection 2', category: 'Academy' },
-    { id: 3, src: 'gallery/DJI_20260401200659_0811_D.JPG', alt: 'Academy Selection 3', category: 'Academy' },
-    { id: 4, src: 'gallery/DJI_20260401201624_0855_D.JPG', alt: 'Academy Selection 4', category: 'Academy' },
-    { id: 5, src: 'gallery/IMG_0733.jpg', alt: 'Academy Selection 5', category: 'Academy' },
-    { id: 6, src: 'gallery/IMG_0749.jpg', alt: 'Academy Selection 6', category: 'Academy' },
-    { id: 7, src: 'gallery/IMG_0782.jpg', alt: 'Academy Selection 7', category: 'Academy' },
+    { id: 1, src: 'gallery/optimized/DJI_20260401195911_0756_D.jpg', alt: 'Academy Selection 1', category: 'Academy' },
+    { id: 2, src: 'gallery/optimized/DJI_20260401200216_0779_D.jpg', alt: 'Academy Selection 2', category: 'Academy' },
+    { id: 3, src: 'gallery/optimized/DJI_20260401200659_0811_D.jpg', alt: 'Academy Selection 3', category: 'Academy' },
+    { id: 4, src: 'gallery/optimized/DJI_20260401201624_0855_D.jpg', alt: 'Academy Selection 4', category: 'Academy' },
+    { id: 5, src: 'gallery/optimized/IMG_0733.jpg', alt: 'Academy Selection 5', category: 'Academy' },
+    { id: 6, src: 'gallery/optimized/IMG_0749.jpg', alt: 'Academy Selection 6', category: 'Academy' },
+    { id: 7, src: 'gallery/optimized/IMG_0782.jpg', alt: 'Academy Selection 7', category: 'Academy' },
 ]
 const Gallery = () => {
     const [selectedImage, setSelectedImage] = useState(null);

@@ -1,20 +1,20 @@
 .account-page {
-    padding: 8rem 0;
+    padding: var(--section-space) 0;
     min-height: 100vh;
     background: #f4f6f9;
 }
 
 .account-card {
     background: white;
-    padding: 3rem;
-    border-radius: 20px;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border-radius: clamp(14px, 3vw, 20px);
     box-shadow: 0 10px 40px rgba(0,0,0,0.08);
     max-width: 800px;
     margin: 0 auto;
 }
 
 .account-card h2 {
-    font-size: 2rem;
+    font-size: clamp(1.55rem, 3vw, 2rem);
     border-bottom: 2px solid #eee;
     padding-bottom: 1rem;
 }
@@ -118,6 +118,7 @@
     overflow-x: auto;
     border-radius: 8px;
     border: 1px solid #eaeaea;
+    -webkit-overflow-scrolling: touch;
 }
 
 .bookings-table {
@@ -150,4 +151,49 @@
 
 .bookings-table tbody tr:hover {
     background: #fafafa;
+}
+
+.booking-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.status-pending {
+    background: #fff8e1;
+    color: #8a5a00;
+}
+
+.status-payment_submitted {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+.status-confirmed,
+.status-paid {
+    background: #e8f5e9;
+    color: #1b5e20;
+}
+
+.status-cancelled,
+.status-expired {
+    background: #ffebee;
+    color: #b71c1c;
+}
+
+@media (max-width: 768px) {
+    .account-page {
+        padding: var(--section-space-sm) 0;
+    }
+
+    .account-card {
+        padding: 1.5rem;
+        border-radius: 14px;
+    }
+
 }

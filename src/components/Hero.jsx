@@ -35,6 +35,8 @@ const Hero = () => {
                 loop
                 muted
                 playsInline
+                preload="auto"
+                poster={`${import.meta.env.BASE_URL}media/hero-poster.jpg`}
                 className="hero-video"
             >
                 <source src={`${import.meta.env.BASE_URL}hero-video.mp4`} type="video/mp4" />

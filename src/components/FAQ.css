@@ -1,5 +1,5 @@
 .faq-section {
-    padding: 8rem 0;
+    padding: var(--section-space) 0;
     background-color: white;
 }
 
@@ -66,7 +66,16 @@
 }
 
 @media (max-width: 768px) {
+    .faq-section {
+        padding: var(--section-space-sm) 0;
+    }
+
     .faq-question h3 {
         font-size: 1.05rem;
+    }
+
+    .faq-question {
+        padding: 1.25rem 0;
+        align-items: flex-start;
     }
 }

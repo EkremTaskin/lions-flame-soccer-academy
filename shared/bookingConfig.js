@@ -8,10 +8,25 @@ export const ACTIVE_BOOKING_WINDOW_MINUTES = 15;
 
 export const BOOKING_STATUSES = {
   pending: 'pending',
+  paymentSubmitted: 'payment_submitted',
+  confirmed: 'confirmed',
   paid: 'paid',
   cancelled: 'cancelled',
   expired: 'expired',
 };
+
+export const BOOKING_STATUS_LABELS = {
+  [BOOKING_STATUSES.pending]: 'Pending Payment',
+  [BOOKING_STATUSES.paymentSubmitted]: 'Payment Submitted',
+  [BOOKING_STATUSES.confirmed]: 'Confirmed',
+  [BOOKING_STATUSES.paid]: 'Confirmed',
+  [BOOKING_STATUSES.cancelled]: 'Cancelled',
+  [BOOKING_STATUSES.expired]: 'Cancelled',
+};
+
+export function getBookingStatusLabel(status) {
+  return BOOKING_STATUS_LABELS[status] ?? 'Pending Payment';
+}
 
 export function getProgramByName(programName) {
   return PROGRAMS.find((program) => program.name === programName) ?? null;
@@ -106,7 +121,7 @@ export function isBookingBlocking(booking, nowIso = new Date().toISOString()) {
     return false;
   }
 
-  if (booking.status === BOOKING_STATUSES.paid) {
+  if (booking.status === BOOKING_STATUSES.paid || booking.status === BOOKING_STATUSES.confirmed) {
     return true;
   }
 
@@ -153,7 +168,7 @@ export function buildBookingRecord({ program, duration, date, time, amount, user
     startMinutes,
     endMinutes: startMinutes + durationMinutes,
     status,
-    paymentStatus: status === BOOKING_STATUSES.paid ? 'paid' : 'unpaid',
+    paymentStatus: [BOOKING_STATUSES.paid, BOOKING_STATUSES.confirmed].includes(status) ? 'paid' : 'unpaid',
     expiresAt: expiresAt ?? null,
     stripeSessionId: stripeSessionId ?? null,
     createdAt: new Date().toISOString(),

@@ -1,15 +1,17 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import React, { useEffect, useState } from 'react';
+import { doc, updateDoc } from 'firebase/firestore';
 import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import Navbar from '../components/Navbar';
 import Loader from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase';
 import {
-  createCheckoutSession,
+  createPaymentLinkBooking,
   fetchAvailableSlots,
-  getCheckoutSessionStatus,
 } from '../utils/bookingApi';
-import { getBookingPrice, getProgramByName, PROGRAMS } from '../../shared/bookingConfig';
+import { BOOKING_STATUSES, getBookingPrice, getProgramByName, PROGRAMS } from '../../shared/bookingConfig';
 import './BookingPage.css';
 
 const BookingPage = () => {
@@ -17,7 +19,6 @@ const BookingPage = () => {
   const queryParams = new URLSearchParams(location.search);
   const initialProgram = queryParams.get('program') || '';
   const checkoutStatus = queryParams.get('checkout');
-  const checkoutSessionId = queryParams.get('session_id');
   const initialDate = queryParams.get('date') || '';
   const initialTime = queryParams.get('time') || '';
   const initialDuration = queryParams.get('duration') || '45';
@@ -31,9 +32,14 @@ const BookingPage = () => {
   const [availableSlots, setAvailableSlots] = useState([]);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [isSubmittingBooking, setIsSubmittingBooking] = useState(false);
-  const [isCheckingSession, setIsCheckingSession] = useState(false);
   const [step, setStep] = useState(selectedProgram ? 1 : 0);
-  const [confirmedBooking, setConfirmedBooking] = useState(null);
+  const [customerDetails, setCustomerDetails] = useState({
+    playerName: '',
+    playerAge: '',
+    parentName: '',
+    parentPhone: '',
+    notes: '',
+  });
 
   const currentProgramData = getProgramByName(selectedProgram);
   const totalPrice = currentProgramData ? getBookingPrice(selectedProgram, selectedDuration) : 0;
@@ -86,46 +92,40 @@ const BookingPage = () => {
       return;
     }
 
-    if (checkoutStatus !== 'success' || !checkoutSessionId) {
+    if (checkoutStatus !== 'success') {
       return;
     }
 
-    let isMounted = true;
-
-    const verifySession = async () => {
-      setIsCheckingSession(true);
-
+    const bookingId = window.localStorage.getItem('pendingPaymentLinkBookingId');
+    const storedBooking = window.localStorage.getItem('pendingPaymentLinkBooking');
+    if (storedBooking) {
       try {
-        const session = await getCheckoutSessionStatus(checkoutSessionId);
-
-        if (!isMounted) {
-          return;
-        }
-
-        if (session.paymentStatus === 'paid') {
-          setConfirmedBooking(session.booking ?? null);
-          setStep(3);
-          toast.success('Payment completed and booking confirmed!');
-          return;
-        }
-
-        toast.info('Payment is still processing. Please refresh in a moment.');
+        const booking = JSON.parse(storedBooking);
+        setSelectedProgram(booking.program || '');
+        setSelectedDuration(booking.duration || '45');
+        setSelectedDate(booking.date || '');
+        setSelectedTime(booking.time || '');
       } catch (error) {
-        console.error('Error checking checkout session:', error);
-        toast.error('We could not verify the payment yet.');
-      } finally {
-        if (isMounted) {
-          setIsCheckingSession(false);
-        }
+        console.error('Could not restore checkout booking details:', error);
       }
-    };
+    }
 
-    verifySession();
+    if (bookingId && db) {
+      updateDoc(doc(db, 'bookings', bookingId), {
+        status: BOOKING_STATUSES.paymentSubmitted,
+        paymentStatus: 'submitted',
+        paymentSubmittedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }).catch((error) => {
+        console.error('Could not update booking status after payment redirect:', error);
+      });
+      window.localStorage.removeItem('pendingPaymentLinkBookingId');
+      window.localStorage.removeItem('pendingPaymentLinkBooking');
+    }
 
-    return () => {
-      isMounted = false;
-    };
-  }, [checkoutStatus, checkoutSessionId]);
+    setStep(3);
+    toast.success('Payment submitted. We will confirm your booking after review.');
+  }, [checkoutStatus]);
 
   const handleDateChange = async (event) => {
     const date = event.target.value;
@@ -134,21 +134,39 @@ const BookingPage = () => {
     setAvailableSlots([]);
   };
 
+  const handleCustomerDetailsChange = (event) => {
+    const { name, value } = event.target;
+    setCustomerDetails((currentDetails) => ({
+      ...currentDetails,
+      [name]: value,
+    }));
+  };
+
   const handlePaymentSubmit = async (event) => {
     event.preventDefault();
     setIsSubmittingBooking(true);
 
     try {
-      const session = await createCheckoutSession({
+      const paymentLinkBooking = await createPaymentLinkBooking({
         program: selectedProgram,
         duration: selectedDuration,
         date: selectedDate,
         time: selectedTime,
-        origin: window.location.origin,
-        basePath: import.meta.env.BASE_URL,
+        user: currentUser,
+        customerDetails,
       });
 
-      window.location.assign(session.url);
+      window.localStorage.setItem('pendingPaymentLinkBookingId', paymentLinkBooking.bookingId);
+      window.localStorage.setItem(
+        'pendingPaymentLinkBooking',
+        JSON.stringify({
+          program: paymentLinkBooking.program,
+          duration: paymentLinkBooking.duration,
+          date: selectedDate,
+          time: selectedTime,
+        }),
+      );
+      window.location.assign(paymentLinkBooking.url);
     } catch (error) {
       console.error('Booking error:', error);
       toast.error(error.message || 'Checkout could not be started. Please try again.');
@@ -162,32 +180,26 @@ const BookingPage = () => {
       <Navbar />
       <div className="booking-page">
         <div className="container booking-container">
-          {isCheckingSession ? (
-            <div className="text-center p-5">
-              <Loader size="default" />
-              <p style={{ marginTop: '1rem' }}>Checking your payment confirmation...</p>
-            </div>
-          ) : step === 3 ? (
+          {step === 3 ? (
             <div className="booking-success text-center">
               <div className="success-icon">*</div>
-              <h1 className="text-primary">Booking Confirmed!</h1>
+              <h1 className="text-primary">Payment Submitted!</h1>
               <p>
-                You have successfully registered for the{' '}
-                <strong>{confirmedBooking?.program ?? selectedProgram}</strong> session.
+                We received your payment flow for the{' '}
+                <strong>{selectedProgram}</strong> session.
               </p>
               <div className="confirmation-details">
                 <p>
-                  <strong>Program:</strong> {confirmedBooking?.program ?? selectedProgram} (
-                  {confirmedBooking?.duration ?? selectedDuration} Min)
+                  <strong>Program:</strong> {selectedProgram} ({selectedDuration} Min)
                 </p>
                 <p>
-                  <strong>Date:</strong> {confirmedBooking?.date ?? selectedDate}
+                  <strong>Date:</strong> {selectedDate}
                 </p>
                 <p>
-                  <strong>Time:</strong> {confirmedBooking?.time ?? selectedTime}
+                  <strong>Time:</strong> {selectedTime}
                 </p>
                 <p>
-                  <strong>Paid:</strong> ${confirmedBooking?.amount ?? totalPrice}.00
+                  <strong>Paid:</strong> ${totalPrice}.00
                 </p>
               </div>
               <Link to="/" className="btn-primary mt-4 inline-block">
@@ -345,9 +357,67 @@ const BookingPage = () => {
                       </div>
 
                       <div className="summary-card">
+                        <h3>Player Details</h3>
+                        <div className="form-group">
+                          <label>Player Name</label>
+                          <input
+                            type="text"
+                            name="playerName"
+                            value={customerDetails.playerName}
+                            onChange={handleCustomerDetailsChange}
+                            required
+                          />
+                        </div>
+                        <div className="form-row">
+                          <div className="form-group">
+                            <label>Player Age</label>
+                            <input
+                              type="number"
+                              name="playerAge"
+                              value={customerDetails.playerAge}
+                              onChange={handleCustomerDetailsChange}
+                              min="3"
+                              max="18"
+                              required
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label>Parent Name</label>
+                            <input
+                              type="text"
+                              name="parentName"
+                              value={customerDetails.parentName}
+                              onChange={handleCustomerDetailsChange}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="form-group">
+                          <label>Parent Phone</label>
+                          <input
+                            type="tel"
+                            name="parentPhone"
+                            value={customerDetails.parentPhone}
+                            onChange={handleCustomerDetailsChange}
+                            required
+                          />
+                        </div>
+                        <div className="form-group compact">
+                          <label>Notes</label>
+                          <textarea
+                            name="notes"
+                            value={customerDetails.notes}
+                            onChange={handleCustomerDetailsChange}
+                            placeholder="Optional"
+                            rows="3"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="summary-card">
                         <div className="summary-row">
                           <span>Payment Method</span>
-                          <span>Secure Stripe Checkout</span>
+                          <span>Stripe Payment Link</span>
                         </div>
                         <div className="summary-row">
                           <span>Reservation Hold</span>

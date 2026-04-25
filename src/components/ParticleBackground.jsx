@@ -2,15 +2,20 @@ import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
+const seededPoint = (index, axis) => {
+    const value = Math.sin((index + 1) * (axis + 2) * 12.9898) * 43758.5453;
+    return ((value - Math.floor(value)) - 0.5) * 20;
+};
+
 const Particles = ({ count = 500 }) => {
     const points = useRef();
 
     const particles = useMemo(() => {
         const temp = [];
         for (let i = 0; i < count; i++) {
-            const x = (Math.random() - 0.5) * 20;
-            const y = (Math.random() - 0.5) * 20;
-            const z = (Math.random() - 0.5) * 20;
+            const x = seededPoint(i, 0);
+            const y = seededPoint(i, 1);
+            const z = seededPoint(i, 2);
             temp.push(x, y, z);
         }
         return new Float32Array(temp);

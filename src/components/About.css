@@ -1,12 +1,12 @@
 .about-section {
-    padding: 8rem 0;
+    padding: var(--section-space) 0;
     background-color: white;
 }
 
 .about-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
     align-items: center;
 }
 
@@ -24,7 +24,7 @@
 }
 
 .section-title {
-    font-size: 3rem;
+    font-size: clamp(2rem, 4.5vw, 3rem);
     margin-bottom: 2rem;
     line-height: 1.2;
     color: #121212;
@@ -38,7 +38,7 @@
 
 .coach-info {
     margin-bottom: 3rem;
-    padding: 2rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
     background: #f9f9f9;
     border-left: 5px solid var(--primary);
     border-radius: 0 15px 15px 0;
@@ -64,6 +64,34 @@
     margin-bottom: 0 !important;
 }
 
+.credential-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.credential-grid div {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.credential-grid strong {
+    display: block;
+    color: #121212;
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+}
+
+.credential-grid span {
+    display: block;
+    color: #666;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
 .stats-grid {
     display: flex;
     gap: 3rem;
@@ -87,7 +115,7 @@
 
 @media (max-width: 968px) {
     .about-section {
-        padding: 5rem 0;
+        padding: var(--section-space-sm) 0;
     }
 
     .about-container {
@@ -101,6 +129,10 @@
 }
 
 @media (max-width: 768px) {
+    .credential-grid {
+        grid-template-columns: 1fr;
+    }
+
     .stats-grid {
         flex-direction: column;
         gap: 1.5rem;
