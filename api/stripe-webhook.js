@@ -8,10 +8,6 @@ const BOOKING_STATUSES = {
   expired: 'expired',
 };
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2026-02-25.clover',
-});
-
 const getRawBody = async (req) => {
   const chunks = [];
 
@@ -21,6 +17,10 @@ const getRawBody = async (req) => {
 
   return Buffer.concat(chunks);
 };
+
+const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2026-02-25.clover',
+});
 
 const getFirebaseCredential = () => {
   if (process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
@@ -143,7 +143,7 @@ export default async function handler(req, res) {
     }
 
     const rawBody = await getRawBody(req);
-    const event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+    const event = getStripe().webhooks.constructEvent(rawBody, signature, webhookSecret);
 
     if (event.type === 'checkout.session.completed' || event.type === 'checkout.session.async_payment_succeeded') {
       const result = await updateBookingAfterPaidCheckout(event.data.object);
@@ -167,4 +167,3 @@ export const config = {
     bodyParser: false,
   },
 };
-
