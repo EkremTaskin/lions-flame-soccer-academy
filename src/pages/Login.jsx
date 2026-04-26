@@ -52,50 +52,69 @@ const Login = () => {
             <Navbar />
             <div className="login-page">
                 <div className="container login-container">
+                    <div className="login-intro" aria-hidden="true">
+                        <span className="login-kicker">Lion's Flame Academy</span>
+                        <h1>{isLogin ? 'Welcome Back' : 'Create Your Account'}</h1>
+                        <p>
+                            Manage training bookings, payment updates, and session details from one secure place.
+                        </p>
+                        <div className="login-highlights">
+                            <span>Secure access</span>
+                            <span>Booking history</span>
+                            <span>Parent-friendly updates</span>
+                        </div>
+                    </div>
                     <div className="login-card">
-                        <h2 className="text-center">{isLogin ? 'Welcome Back' : 'Join The Pride'}</h2>
-                        <p className="text-center mb-4">
+                        <div className="login-card-header">
+                            <span className="login-card-eyebrow">{isLogin ? 'Account Login' : 'New Family Account'}</span>
+                            <h2>{isLogin ? 'Welcome Back' : 'Join The Pride'}</h2>
+                        </div>
+                        <p className="login-card-copy">
                             {isLogin ? 'Login to manage your bookings.' : 'Create an account to get started.'}
                         </p>
                         
                         <form onSubmit={handleSubmit} className="login-form">
                             <div className="form-group">
-                                <label>Email Address</label>
+                                <label htmlFor="auth-email">Email Address</label>
                                 <input 
+                                    id="auth-email"
                                     type="email" 
                                     className="form-input" 
+                                    placeholder="you@example.com"
                                     value={email} 
                                     onChange={e => setEmail(e.target.value)} 
                                     required 
                                 />
                             </div>
                             <div className="form-group">
-                                <label>Password</label>
+                                <label htmlFor="auth-password">Password</label>
                                 <input 
+                                    id="auth-password"
                                     type="password" 
                                     className="form-input" 
+                                    placeholder="Enter your password"
                                     value={password} 
                                     onChange={e => setPassword(e.target.value)} 
                                     required 
                                 />
                             </div>
                             
-                            {error && <div className="form-error text-center p-2 mb-3 rounded" style={{color:'red'}}>{error}</div>}
+                            {error && <div className="form-error">{error}</div>}
                             
-                            <button type="submit" className="btn-primary full-width" disabled={loading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                            <button type="submit" className="login-submit" disabled={loading}>
                                 {loading ? (
                                     <>
-                                        <div className="spinner" style={{width: '20px', height: '20px', borderWidth: '2px', borderColor: 'rgba(255,255,255,0.3)', borderTopColor: '#fff'}}></div>
+                                        <div className="spinner login-spinner"></div>
                                         <span>Processing...</span>
                                     </>
                                 ) : (isLogin ? 'Log In' : 'Sign Up')}
                             </button>
                         </form>
                         
-                        <div className="text-center mt-4 pt-3 border-top">
-                            <p className="mb-0">
+                        <div className="auth-switch">
+                            <p>
                                 {isLogin ? "Don't have an account? " : "Already have an account? "}
-                                <button type="button" className="btn-text p-0" onClick={() => setIsLogin(!isLogin)}>
+                                <button type="button" onClick={() => setIsLogin(!isLogin)}>
                                     {isLogin ? 'Sign up here' : 'Log in here'}
                                 </button>
                             </p>
