@@ -214,6 +214,38 @@
     font-size: 1rem;
 }
 
+.payment-form input[readonly] {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.booking-account-note {
+    display: grid;
+    gap: 0.4rem;
+    margin-bottom: 2rem;
+    padding: 1rem 1.15rem;
+    border: 1px solid #d8e5ff;
+    border-radius: 12px;
+    background: #f4f8ff;
+    color: #334155;
+}
+
+.booking-account-note strong {
+    color: var(--secondary);
+    font-size: 0.95rem;
+}
+
+.booking-account-note span {
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+
+.booking-account-note a {
+    width: fit-content;
+    color: var(--primary);
+    font-weight: 800;
+}
+
 .payment-form textarea {
     resize: vertical;
     min-height: 90px;

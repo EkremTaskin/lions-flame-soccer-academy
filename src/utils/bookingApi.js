@@ -86,8 +86,11 @@ export const createPaymentLinkBooking = async ({ program, duration, date, time, 
     throw new Error('Firebase is not initialized.');
   }
 
-  if (!user) {
-    throw new Error('You must be logged in to book a session.');
+  const guestEmail = customerDetails?.parentEmail?.trim().toLowerCase() ?? '';
+  const bookingEmail = user?.email ?? guestEmail;
+
+  if (!bookingEmail) {
+    throw new Error('Please enter a parent email address before checkout.');
   }
 
   const existingBookings = await getDocs(query(collection(db, 'bookings'), where('date', '==', date)));
@@ -109,8 +112,8 @@ export const createPaymentLinkBooking = async ({ program, duration, date, time, 
     date,
     time,
     amount,
-    userId: user.uid,
-    userEmail: user.email ?? '',
+    userId: user?.uid ?? 'guest',
+    userEmail: bookingEmail,
     status: BOOKING_STATUSES.pending,
     expiresAt,
   });
@@ -121,9 +124,11 @@ export const createPaymentLinkBooking = async ({ program, duration, date, time, 
       playerName: customerDetails?.playerName ?? '',
       playerAge: customerDetails?.playerAge ?? '',
       parentName: customerDetails?.parentName ?? '',
+      parentEmail: bookingEmail,
       parentPhone: customerDetails?.parentPhone ?? '',
       notes: customerDetails?.notes ?? '',
     },
+    isGuestBooking: !user,
     paymentProvider: 'stripe_payment_link',
     updatedAt: new Date().toISOString(),
   };
@@ -133,8 +138,8 @@ export const createPaymentLinkBooking = async ({ program, duration, date, time, 
   const checkoutUrl = new URL(paymentLink);
   checkoutUrl.searchParams.set('client_reference_id', bookingRef.id);
 
-  if (user.email) {
-    checkoutUrl.searchParams.set('prefilled_email', user.email);
+  if (bookingEmail) {
+    checkoutUrl.searchParams.set('prefilled_email', bookingEmail);
   }
 
   await notifyBookingCreated({

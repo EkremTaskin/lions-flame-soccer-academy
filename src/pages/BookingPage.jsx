@@ -38,6 +38,7 @@ const BookingPage = () => {
     playerName: '',
     playerAge: '',
     parentName: '',
+    parentEmail: currentUser?.email || '',
     parentPhone: '',
     notes: '',
   });
@@ -45,6 +46,17 @@ const BookingPage = () => {
 
   const currentProgramData = getProgramByName(selectedProgram);
   const totalPrice = currentProgramData ? getBookingPrice(selectedProgram, selectedDuration) : 0;
+
+  useEffect(() => {
+    if (!currentUser?.email) {
+      return;
+    }
+
+    setCustomerDetails((currentDetails) => ({
+      ...currentDetails,
+      parentEmail: currentUser.email,
+    }));
+  }, [currentUser?.email]);
 
   useEffect(() => {
     if (trackedBookingView.current) {
@@ -376,9 +388,21 @@ const BookingPage = () => {
                         </div>
                       </div>
 
-                      <div className="form-group">
-                        <label>Account</label>
-                        <input type="email" value={currentUser?.email || ''} readOnly />
+                      <div className="booking-account-note">
+                        {currentUser ? (
+                          <>
+                            <strong>Booking as {currentUser.email}</strong>
+                            <span>You will be able to see this booking from your account page.</span>
+                          </>
+                        ) : (
+                          <>
+                            <strong>No account required to book.</strong>
+                            <span>
+                              Create an account or log in later with the same email if you want to manage booking history online.
+                            </span>
+                            <Link to="/login">Log in or create account</Link>
+                          </>
+                        )}
                       </div>
 
                       <div className="summary-card">
@@ -416,6 +440,17 @@ const BookingPage = () => {
                               required
                             />
                           </div>
+                        </div>
+                        <div className="form-group">
+                          <label>Parent Email</label>
+                          <input
+                            type="email"
+                            name="parentEmail"
+                            value={customerDetails.parentEmail}
+                            onChange={handleCustomerDetailsChange}
+                            readOnly={Boolean(currentUser?.email)}
+                            required
+                          />
                         </div>
                         <div className="form-group">
                           <label>Parent Phone</label>

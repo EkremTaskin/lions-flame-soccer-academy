@@ -35,12 +35,7 @@ function App() {
         <Route path="/policies/terms" element={<PolicyPage type="terms" />} />
         <Route path="/policies/parent-consent" element={<PolicyPage type="consent" />} />
         
-        {/* Only logged in users can book */}
-        <Route path="/book" element={
-          <ProtectedRoute>
-            <BookingPage />
-          </ProtectedRoute>
-        } />
+        <Route path="/book" element={<BookingPage />} />
 
         {/* User Account Page */}
         <Route path="/account" element={
