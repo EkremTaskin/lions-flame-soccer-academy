@@ -17,7 +17,7 @@ export const BOOKING_STATUSES = {
 
 export const BOOKING_STATUS_LABELS = {
   [BOOKING_STATUSES.pending]: 'Pending Payment',
-  [BOOKING_STATUSES.paymentSubmitted]: 'Payment Submitted',
+  [BOOKING_STATUSES.paymentSubmitted]: 'Payment Received - Awaiting Confirmation',
   [BOOKING_STATUSES.confirmed]: 'Confirmed',
   [BOOKING_STATUSES.paid]: 'Confirmed',
   [BOOKING_STATUSES.cancelled]: 'Cancelled',

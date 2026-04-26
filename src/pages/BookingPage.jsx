@@ -113,8 +113,8 @@ const BookingPage = () => {
     if (bookingId && db) {
       updateDoc(doc(db, 'bookings', bookingId), {
         status: BOOKING_STATUSES.paymentSubmitted,
-        paymentStatus: 'submitted',
-        paymentSubmittedAt: new Date().toISOString(),
+        paymentStatus: 'returned_unverified',
+        checkoutReturnedAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }).catch((error) => {
         console.error('Could not update booking status after payment redirect:', error);
@@ -124,7 +124,7 @@ const BookingPage = () => {
     }
 
     setStep(3);
-    toast.success('Payment submitted. We will confirm your booking after review.');
+    toast.success('Payment return received. We will verify payment and confirm your booking after review.');
   }, [checkoutStatus]);
 
   const handleDateChange = async (event) => {
@@ -185,8 +185,8 @@ const BookingPage = () => {
               <div className="success-icon">*</div>
               <h1 className="text-primary">Payment Submitted!</h1>
               <p>
-                We received your payment flow for the{' '}
-                <strong>{selectedProgram}</strong> session.
+                We received your checkout return for the{' '}
+                <strong>{selectedProgram}</strong> session. Stripe will verify payment automatically, then our team will confirm the appointment.
               </p>
               <div className="confirmation-details">
                 <p>
