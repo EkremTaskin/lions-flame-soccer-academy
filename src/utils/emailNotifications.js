@@ -1,21 +1,5 @@
-const EMAILJS_ENDPOINT = 'https://api.emailjs.com/api/v1.0/email/send';
-
-const EMAIL_CONFIG = {
-  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID,
-  publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-  adminEmail: import.meta.env.VITE_ADMIN_EMAIL,
-  siteUrl: import.meta.env.VITE_SITE_URL || 'https://lionsflameacademy.com',
-  templates: {
-    registration: import.meta.env.VITE_EMAILJS_TEMPLATE_REGISTRATION,
-    bookingCustomer: import.meta.env.VITE_EMAILJS_TEMPLATE_BOOKING_CUSTOMER,
-    bookingAdmin: import.meta.env.VITE_EMAILJS_TEMPLATE_BOOKING_ADMIN,
-    bookingConfirmed: import.meta.env.VITE_EMAILJS_TEMPLATE_BOOKING_CONFIRMED,
-  },
-};
-
-const isEmailEnabled = (templateId) => (
-  Boolean(EMAIL_CONFIG.serviceId && EMAIL_CONFIG.publicKey && templateId)
-);
+const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://lionsflameacademy.com';
+const EMAIL_API_URL = import.meta.env.VITE_EMAIL_API_URL || '/api/send-email';
 
 const formatMoney = (amount) => {
   const numberAmount = Number(amount);
@@ -26,18 +10,12 @@ const getBookingEmailParams = (booking = {}) => {
   const customerDetails = booking.customerDetails ?? {};
 
   return {
-    booking_id: booking.id ?? booking.bookingId ?? '',
-    site_url: EMAIL_CONFIG.siteUrl,
-    login_url: `${EMAIL_CONFIG.siteUrl}/login`,
-    account_url: `${EMAIL_CONFIG.siteUrl}/account`,
-    admin_url: `${EMAIL_CONFIG.siteUrl}/admin`,
-    admin_email: EMAIL_CONFIG.adminEmail ?? '',
-    user_email: booking.userEmail ?? '',
-    to_email: booking.userEmail ?? '',
-    player_name: customerDetails.playerName ?? '',
-    player_age: customerDetails.playerAge ?? '',
-    parent_name: customerDetails.parentName ?? '',
-    parent_phone: customerDetails.parentPhone ?? '',
+    bookingId: booking.id ?? booking.bookingId ?? '',
+    userEmail: booking.userEmail ?? '',
+    playerName: customerDetails.playerName ?? '',
+    playerAge: customerDetails.playerAge ?? '',
+    parentName: customerDetails.parentName ?? '',
+    parentPhone: customerDetails.parentPhone ?? '',
     notes: customerDetails.notes ?? '',
     program: booking.program ?? '',
     date: booking.date ?? '',
@@ -45,76 +23,61 @@ const getBookingEmailParams = (booking = {}) => {
     duration: booking.duration ? `${booking.duration} minutes` : '',
     amount: formatMoney(booking.amount ?? booking.price),
     status: booking.status ?? '',
+    siteUrl: SITE_URL,
+    accountUrl: `${SITE_URL}/account`,
+    adminUrl: `${SITE_URL}/admin`,
   };
 };
 
-async function sendEmail(templateId, templateParams) {
-  if (!isEmailEnabled(templateId)) {
-    console.info('Email notification skipped. EmailJS env vars are not configured.');
-    return { skipped: true };
-  }
-
-  const response = await fetch(EMAILJS_ENDPOINT, {
+async function sendEmailEvent(event, payload) {
+  const response = await fetch(EMAIL_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      service_id: EMAIL_CONFIG.serviceId,
-      template_id: templateId,
-      user_id: EMAIL_CONFIG.publicKey,
-      template_params: templateParams,
-    }),
+    body: JSON.stringify({ event, payload }),
   });
 
   if (!response.ok) {
-    throw new Error(`EmailJS request failed with status ${response.status}`);
+    throw new Error(`Email endpoint failed with status ${response.status}`);
   }
 
-  return { skipped: false };
+  return response.json().catch(() => ({ ok: true }));
 }
 
-async function sendEmailSafely(templateId, templateParams, label) {
+async function sendEmailSafely(event, payload, label) {
   try {
-    return await sendEmail(templateId, templateParams);
+    return await sendEmailEvent(event, payload);
   } catch (error) {
     console.error(`Failed to send ${label} email:`, error);
-    return { skipped: false, failed: true };
+    return { failed: true };
   }
 }
 
 export function notifyRegistration({ email }) {
   return sendEmailSafely(
-    EMAIL_CONFIG.templates.registration,
+    'registration',
     {
-      to_email: email,
-      user_email: email,
-      site_url: EMAIL_CONFIG.siteUrl,
-      login_url: `${EMAIL_CONFIG.siteUrl}/login`,
+      userEmail: email,
+      siteUrl: SITE_URL,
+      loginUrl: `${SITE_URL}/login`,
+      accountUrl: `${SITE_URL}/account`,
     },
     'registration',
   );
 }
 
 export function notifyBookingCreated(booking) {
-  const params = getBookingEmailParams(booking);
-
-  return Promise.allSettled([
-    sendEmailSafely(EMAIL_CONFIG.templates.bookingCustomer, params, 'booking customer'),
-    sendEmailSafely(
-      EMAIL_CONFIG.templates.bookingAdmin,
-      {
-        ...params,
-        to_email: EMAIL_CONFIG.adminEmail,
-      },
-      'booking admin',
-    ),
-  ]);
+  return sendEmailSafely(
+    'booking_created',
+    getBookingEmailParams(booking),
+    'booking created',
+  );
 }
 
 export function notifyBookingConfirmed(booking) {
   return sendEmailSafely(
-    EMAIL_CONFIG.templates.bookingConfirmed,
+    'booking_confirmed',
     getBookingEmailParams(booking),
     'booking confirmed',
   );

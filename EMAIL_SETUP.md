@@ -1,6 +1,18 @@
 # Email Notifications Setup
 
-The site can send email notifications through EmailJS without adding a backend.
+The site sends production email through a Vercel Serverless Function and Brevo SMTP.
+
+## Architecture
+
+```txt
+React app
+  -> /api/send-email
+  -> Vercel Function
+  -> Brevo SMTP
+  -> customer/admin inbox
+```
+
+Secrets stay on Vercel. Do not add SMTP keys to any `VITE_` variable.
 
 ## When Emails Send
 
@@ -8,48 +20,35 @@ The site can send email notifications through EmailJS without adding a backend.
 - New booking request: sends an email to the customer and to the academy admin.
 - Booking confirmed by admin: sends an email to the customer.
 
-## Required EmailJS Templates
+## Vercel Environment Variables
 
-Create four templates in EmailJS:
+Add these variables in Vercel Project Settings -> Environment Variables:
 
-- `registration`
-- `booking customer`
-- `booking admin`
-- `booking confirmed`
+```txt
+BREVO_SMTP_LOGIN=your_brevo_smtp_login
+BREVO_SMTP_KEY=your_brevo_smtp_key
+MAIL_FROM=verified_sender@yourdomain.com
+ADMIN_EMAIL=lionsflamesocceracademy@gmail.com
+```
 
-Each template should use `{{to_email}}` as the recipient email. Useful template variables:
+Optional:
 
-- `{{user_email}}`
-- `{{admin_email}}`
-- `{{player_name}}`
-- `{{player_age}}`
-- `{{parent_name}}`
-- `{{parent_phone}}`
-- `{{program}}`
-- `{{date}}`
-- `{{time}}`
-- `{{duration}}`
-- `{{amount}}`
-- `{{status}}`
-- `{{booking_id}}`
-- `{{account_url}}`
-- `{{admin_url}}`
-- `{{site_url}}`
+```txt
+BREVO_SMTP_HOST=smtp-relay.brevo.com
+BREVO_SMTP_PORT=587
+```
 
-## Environment Variables
+## Frontend Environment Variables
 
-Add these to `.env.local` before building and deploying:
+These are safe public values:
 
 ```txt
 VITE_SITE_URL=https://lionsflameacademy.com
-VITE_ADMIN_EMAIL=lionsflamesocceracademy@gmail.com
-
-VITE_EMAILJS_SERVICE_ID=your_service_id
-VITE_EMAILJS_PUBLIC_KEY=your_public_key
-VITE_EMAILJS_TEMPLATE_REGISTRATION=your_registration_template_id
-VITE_EMAILJS_TEMPLATE_BOOKING_CUSTOMER=your_booking_customer_template_id
-VITE_EMAILJS_TEMPLATE_BOOKING_ADMIN=your_booking_admin_template_id
-VITE_EMAILJS_TEMPLATE_BOOKING_CONFIRMED=your_booking_confirmed_template_id
+VITE_EMAIL_API_URL=/api/send-email
 ```
 
-If these values are missing, the site skips emails and continues working normally.
+## Brevo Notes
+
+- `MAIL_FROM` must be a sender verified in Brevo.
+- `BREVO_SMTP_KEY` is secret and must only live in Vercel environment variables.
+- If a key has been pasted into chat or committed anywhere, revoke it and create a new one.

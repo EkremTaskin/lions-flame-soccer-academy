@@ -20,6 +20,9 @@ importers:
       gsap:
         specifier: ^3.14.2
         version: 3.15.0
+      nodemailer:
+        specifier: ^8.0.6
+        version: 8.0.6
       react:
         specifier: ^19.2.0
         version: 19.2.5
@@ -1395,6 +1398,10 @@ packages:
 
   node-releases@2.0.38:
     resolution: {integrity: sha512-3qT/88Y3FbH/Kx4szpQQ4HzUbVrHPKTLVpVocKiLfoYvw9XSGOX2FmD2d6DrXbVYyAQTF2HeF6My8jmzx7/CRw==}
+
+  nodemailer@8.0.6:
+    resolution: {integrity: sha512-Nm2XeuDwwy2wi5A+8jPWwQwNzcjNjhWdE3pVLoXEusxJqCnAPAgnBGkSmiLknbnWuOF9qraRpYZjfxqtKZ4tPw==}
+    engines: {node: '>=6.0.0'}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -3200,6 +3207,8 @@ snapshots:
   natural-compare@1.4.0: {}
 
   node-releases@2.0.38: {}
+
+  nodemailer@8.0.6: {}
 
   optionator@0.9.4:
     dependencies:
