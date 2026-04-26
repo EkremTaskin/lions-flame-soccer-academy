@@ -24,6 +24,13 @@ const Account = () => {
     const [bookings, setBookings] = useState([]);
     const [loadingBookings, setLoadingBookings] = useState(true);
 
+    const confirmedBookings = bookings.filter((booking) => (
+        booking.status === BOOKING_STATUSES.confirmed || booking.status === BOOKING_STATUSES.paid
+    )).length;
+    const pendingBookings = bookings.filter((booking) => (
+        booking.status === BOOKING_STATUSES.pending || booking.status === BOOKING_STATUSES.paymentSubmitted
+    )).length;
+
     useEffect(() => {
         let active = true;
         const fetchBookings = async () => {
@@ -98,72 +105,117 @@ const Account = () => {
             <Navbar />
             <div className="account-page">
                 <div className="container account-container">
-                    <div className="account-card">
-                        <h2 className="text-secondary mb-4">My Account</h2>
-                        
-                        <div className="account-info mb-5">
-                            <h4>Profile Details</h4>
-                            <p><strong>Email:</strong> {currentUser?.email}</p>
-                            <p><strong>Role:</strong> <span className={`role-badge ${userRole || 'user'}`}>{userRole || 'User'}</span></p>
+                    <section className="account-hero">
+                        <div>
+                            <span className="account-kicker">Family Dashboard</span>
+                            <h1>My Account</h1>
+                            <p>Track booking requests, payment updates, and account security in one place.</p>
                         </div>
-                        
-                        <div className="bookings-section mb-5">
-                            <h4>My Past Bookings</h4>
+                        <button onClick={handleLogout} className="account-logout">
+                            Log Out
+                        </button>
+                    </section>
+
+                    <section className="account-summary-grid">
+                        <article className="summary-card profile-summary">
+                            <span className="summary-label">Signed in as</span>
+                            <strong>{currentUser?.email}</strong>
+                            <span className={`role-badge ${userRole || 'user'}`}>{userRole || 'User'}</span>
+                        </article>
+                        <article className="summary-card">
+                            <span className="summary-label">Total Bookings</span>
+                            <strong>{bookings.length}</strong>
+                        </article>
+                        <article className="summary-card">
+                            <span className="summary-label">Confirmed</span>
+                            <strong>{confirmedBookings}</strong>
+                        </article>
+                        <article className="summary-card">
+                            <span className="summary-label">Needs Review</span>
+                            <strong>{pendingBookings}</strong>
+                        </article>
+                    </section>
+
+                    <div className="account-layout">
+                        <section className="account-panel bookings-section">
+                            <div className="panel-header">
+                                <div>
+                                    <span className="panel-eyebrow">Training</span>
+                                    <h2>My Bookings</h2>
+                                </div>
+                                <button onClick={() => navigate('/book')} className="panel-action">
+                                    New Booking
+                                </button>
+                            </div>
                             {loadingBookings ? (
-                                <div className="text-center p-4">
+                                <div className="account-loading">
                                     <Loader size="small" />
                                 </div>
                             ) : bookings.length > 0 ? (
-                                <div className="bookings-table-wrapper">
-                                    <table className="bookings-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Program</th>
-                                                <th>Player</th>
-                                                <th>Date</th>
-                                                <th>Time</th>
-                                                <th>Duration</th>
-                                                <th>Status</th>
-                                                <th>Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {bookings.map(book => (
-                                                <tr key={book.id}>
-                                                    <td><strong>{book.program}</strong></td>
-                                                    <td>{book.customerDetails?.playerName || '-'}</td>
-                                                    <td>{book.date}</td>
-                                                    <td>{book.time}</td>
-                                                    <td>{book.duration} Min</td>
-                                                    <td>
-                                                        <span className={`booking-status status-${book.status || BOOKING_STATUSES.pending}`}>
-                                                            {getBookingStatusLabel(book.status)}
-                                                        </span>
-                                                    </td>
-                                                    <td>${book.amount ?? book.price}.00</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                <div className="booking-list">
+                                    {bookings.map(book => (
+                                        <article className="booking-item" key={book.id}>
+                                            <div className="booking-main">
+                                                <span className={`booking-status status-${book.status || BOOKING_STATUSES.pending}`}>
+                                                    {getBookingStatusLabel(book.status)}
+                                                </span>
+                                                <h3>{book.program}</h3>
+                                                <p>{book.customerDetails?.playerName || 'Player details pending'}</p>
+                                            </div>
+                                            <dl className="booking-meta">
+                                                <div>
+                                                    <dt>Date</dt>
+                                                    <dd>{book.date}</dd>
+                                                </div>
+                                                <div>
+                                                    <dt>Time</dt>
+                                                    <dd>{book.time}</dd>
+                                                </div>
+                                                <div>
+                                                    <dt>Duration</dt>
+                                                    <dd>{book.duration} Min</dd>
+                                                </div>
+                                                <div>
+                                                    <dt>Price</dt>
+                                                    <dd>${book.amount ?? book.price}.00</dd>
+                                                </div>
+                                            </dl>
+                                        </article>
+                                    ))}
                                 </div>
                             ) : (
-                                <div className="alert alert-success" style={{background: '#f8f9fa', color: '#666', border: '1px solid #ddd'}}>
-                                    You have no past bookings yet. Let's get on the pitch!
+                                <div className="empty-bookings">
+                                    <h3>No bookings yet</h3>
+                                    <p>Choose a program and secure your first training session.</p>
+                                    <button onClick={() => navigate('/book')} className="panel-action">
+                                        Book A Session
+                                    </button>
                                 </div>
                             )}
-                        </div>
+                        </section>
                         
-                        <div className="account-security mb-5">
-                            <h4>Security</h4>
-                            <form onSubmit={handlePasswordChange} className="password-form mt-3">
+                        <aside className="account-side">
+                            <section className="account-panel account-security">
+                                <div className="panel-header compact">
+                                    <div>
+                                        <span className="panel-eyebrow">Security</span>
+                                        <h2>Password</h2>
+                                    </div>
+                                </div>
+                                <p className="security-copy">
+                                    Update your password regularly to keep booking and payment details protected.
+                                </p>
+                                <form onSubmit={handlePasswordChange} className="password-form">
                                 {error && <div className="alert alert-danger">{error}</div>}
                                 {message && <div className="alert alert-success">{message}</div>}
                                 
                                 <div className="form-group">
-                                    <label>New Password</label>
+                                    <label htmlFor="new-password">New Password</label>
                                     <input 
+                                        id="new-password"
                                         type="password" 
                                         className="form-input" 
+                                        placeholder="Minimum 6 characters"
                                         value={newPassword}
                                         onChange={(e) => setNewPassword(e.target.value)}
                                         required
@@ -171,32 +223,29 @@ const Account = () => {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label>Confirm New Password</label>
+                                    <label htmlFor="confirm-password">Confirm New Password</label>
                                     <input 
+                                        id="confirm-password"
                                         type="password" 
                                         className="form-input" 
+                                        placeholder="Repeat new password"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                         required
                                         minLength="6"
                                     />
                                 </div>
-                                <button type="submit" className="btn-primary mt-2" disabled={loading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                                <button type="submit" className="security-submit" disabled={loading}>
                                     {loading ? (
                                         <>
-                                            <div className="spinner" style={{width: '20px', height: '20px', borderWidth: '2px', borderColor: 'rgba(255,255,255,0.3)', borderTopColor: '#fff'}}></div>
+                                            <div className="spinner account-spinner"></div>
                                             <span>Updating...</span>
                                         </>
                                     ) : 'Update Password'}
                                 </button>
                             </form>
-                        </div>
-
-                        <div className="account-actions border-top pt-4">
-                            <button onClick={handleLogout} className="btn-danger full-width">
-                                Log Out
-                            </button>
-                        </div>
+                            </section>
+                        </aside>
                     </div>
                 </div>
             </div>
