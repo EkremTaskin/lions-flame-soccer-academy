@@ -7,6 +7,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import Account from './pages/Account';
 import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
+import PolicyPage from './pages/PolicyPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Toaster } from 'sonner';
 
@@ -29,6 +30,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/shop/:productId" element={<ProductDetail />} />
+        <Route path="/policies/cancellation" element={<PolicyPage type="cancellation" />} />
+        <Route path="/policies/privacy" element={<PolicyPage type="privacy" />} />
+        <Route path="/policies/terms" element={<PolicyPage type="terms" />} />
+        <Route path="/policies/parent-consent" element={<PolicyPage type="consent" />} />
         
         {/* Only logged in users can book */}
         <Route path="/book" element={

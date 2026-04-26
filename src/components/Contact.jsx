@@ -115,6 +115,10 @@ const Contact = () => {
                             <li><Link to="/#gallery">Gallery</Link></li>
                             <li><Link to="/#testimonials">Stories</Link></li>
                             <li><Link to="/#faq">FAQ</Link></li>
+                            <li><Link to="/policies/cancellation">Cancellation Policy</Link></li>
+                            <li><Link to="/policies/privacy">Privacy Policy</Link></li>
+                            <li><Link to="/policies/terms">Terms</Link></li>
+                            <li><Link to="/policies/parent-consent">Parent Consent</Link></li>
                         </ul>
                     </div>
 

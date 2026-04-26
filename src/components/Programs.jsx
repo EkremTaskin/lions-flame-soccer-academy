@@ -4,6 +4,7 @@ import './Programs.css';
 import imgOneOnOne from '../assets/optimized/private_training.jpg';
 import imgSmallGroup from '../assets/small_group_img_1769098675408.jpg';
 import imgLargeGroup from '../assets/large_group_img_1769098698452.jpg';
+import { trackSiteEvent } from '../utils/siteAnalytics';
 
 const programsData = [
     {
@@ -88,7 +89,16 @@ const Programs = () => {
                                         <li key={i}>{feature}</li>
                                     ))}
                                 </ul>
-                                <Link to={`/book?program=${encodeURIComponent(program.title)}`} className="btn-program">BOOK</Link>
+                                <Link
+                                    to={`/book?program=${encodeURIComponent(program.title)}`}
+                                    className="btn-program"
+                                    onClick={() => trackSiteEvent('program_click', {
+                                        program: program.title,
+                                        source: 'home_program_card',
+                                    })}
+                                >
+                                    BOOK
+                                </Link>
                             </div>
                         </div>
                     ))}

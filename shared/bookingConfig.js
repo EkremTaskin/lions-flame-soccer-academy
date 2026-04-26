@@ -11,6 +11,7 @@ export const BOOKING_STATUSES = {
   paymentSubmitted: 'payment_submitted',
   confirmed: 'confirmed',
   paid: 'paid',
+  blocked: 'blocked',
   cancelled: 'cancelled',
   expired: 'expired',
 };
@@ -20,6 +21,7 @@ export const BOOKING_STATUS_LABELS = {
   [BOOKING_STATUSES.paymentSubmitted]: 'Payment Received - Awaiting Confirmation',
   [BOOKING_STATUSES.confirmed]: 'Confirmed',
   [BOOKING_STATUSES.paid]: 'Confirmed',
+  [BOOKING_STATUSES.blocked]: 'Blocked',
   [BOOKING_STATUSES.cancelled]: 'Cancelled',
   [BOOKING_STATUSES.expired]: 'Cancelled',
 };
@@ -121,6 +123,10 @@ export function isBookingBlocking(booking, nowIso = new Date().toISOString()) {
     return false;
   }
 
+  if (booking.isBlocked || booking.status === BOOKING_STATUSES.blocked) {
+    return true;
+  }
+
   if (booking.status === BOOKING_STATUSES.paid || booking.status === BOOKING_STATUSES.confirmed) {
     return true;
   }
@@ -172,5 +178,35 @@ export function buildBookingRecord({ program, duration, date, time, amount, user
     expiresAt: expiresAt ?? null,
     stripeSessionId: stripeSessionId ?? null,
     createdAt: new Date().toISOString(),
+  };
+}
+
+export function buildBlockedSlotRecord({ date, time, duration, blockedBy = 'admin', reason = '' }) {
+  const now = new Date().toISOString();
+  const isFullDay = duration === 'day';
+  const durationMinutes = isFullDay ? null : getDurationMinutes(duration);
+  const { startHour, endHour } = getDailySlotBounds(date);
+  const startMinutes = isFullDay ? startHour * 60 : parseTimeLabel(time);
+  const endMinutes = isFullDay ? endHour * 60 : startMinutes + durationMinutes;
+
+  return {
+    program: isFullDay ? 'BLOCKED DAY' : 'BLOCKED',
+    duration: isFullDay ? endMinutes - startMinutes : durationMinutes,
+    date,
+    time: isFullDay ? 'All day' : time,
+    amount: 0,
+    userId: blockedBy,
+    userEmail: 'ADMIN (BLOCKED)',
+    startMinutes,
+    endMinutes,
+    status: BOOKING_STATUSES.blocked,
+    paymentStatus: 'not_applicable',
+    isBlocked: true,
+    blockedScope: isFullDay ? 'day' : 'slot',
+    blockReason: reason,
+    expiresAt: null,
+    stripeSessionId: null,
+    createdAt: now,
+    updatedAt: now,
   };
 }

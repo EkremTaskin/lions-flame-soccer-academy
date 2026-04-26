@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -11,6 +11,7 @@ import {
   createPaymentLinkBooking,
   fetchAvailableSlots,
 } from '../utils/bookingApi';
+import { trackSiteEvent } from '../utils/siteAnalytics';
 import { BOOKING_STATUSES, getBookingPrice, getProgramByName, PROGRAMS } from '../../shared/bookingConfig';
 import './BookingPage.css';
 
@@ -40,9 +41,21 @@ const BookingPage = () => {
     parentPhone: '',
     notes: '',
   });
+  const trackedBookingView = useRef(false);
 
   const currentProgramData = getProgramByName(selectedProgram);
   const totalPrice = currentProgramData ? getBookingPrice(selectedProgram, selectedDuration) : 0;
+
+  useEffect(() => {
+    if (trackedBookingView.current) {
+      return;
+    }
+
+    trackedBookingView.current = true;
+    trackSiteEvent('booking_page_view', {
+      program: initialProgram || null,
+    });
+  }, [initialProgram]);
 
   useEffect(() => {
     if (!selectedDate) {
@@ -166,6 +179,14 @@ const BookingPage = () => {
           time: selectedTime,
         }),
       );
+      await trackSiteEvent('checkout_started', {
+        bookingId: paymentLinkBooking.bookingId,
+        program: paymentLinkBooking.program,
+        duration: paymentLinkBooking.duration,
+        date: selectedDate,
+        time: selectedTime,
+        amount: totalPrice,
+      });
       window.location.assign(paymentLinkBooking.url);
     } catch (error) {
       console.error('Booking error:', error);
@@ -227,6 +248,10 @@ const BookingPage = () => {
                           className={`program-select-btn ${selectedProgram === program.name ? 'selected' : ''}`}
                           onClick={() => {
                             setSelectedProgram(program.name);
+                            trackSiteEvent('program_click', {
+                              program: program.name,
+                              source: 'booking_page',
+                            });
                             setStep(1);
                           }}
                         >

@@ -7,7 +7,7 @@ import Loader from '../components/Loader';
 import { db } from '../firebase';
 import { fetchAvailableSlots } from '../utils/bookingApi';
 import { notifyBookingConfirmed } from '../utils/emailNotifications';
-import { BOOKING_STATUSES, buildBookingRecord, getBookingStatusLabel } from '../../shared/bookingConfig';
+import { BOOKING_STATUSES, buildBlockedSlotRecord, getBookingStatusLabel } from '../../shared/bookingConfig';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -16,9 +16,13 @@ const AdminDashboard = () => {
   const [blockingSlot, setBlockingSlot] = useState(false);
   const [blockDate, setBlockDate] = useState('');
   const [blockTime, setBlockTime] = useState('');
+  const [blockDuration, setBlockDuration] = useState('45');
+  const [blockReason, setBlockReason] = useState('');
   const [availableSlots, setAvailableSlots] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [analyticsEvents, setAnalyticsEvents] = useState([]);
+  const [loadingAnalytics, setLoadingAnalytics] = useState(true);
 
   const fetchAllBookings = async () => {
     try {
@@ -41,23 +45,46 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchAnalyticsEvents = async () => {
+    try {
+      setLoadingAnalytics(true);
+      const analyticsQuery = query(collection(db, 'analyticsEvents'));
+      const snapshot = await getDocs(analyticsQuery);
+      const events = [];
+
+      snapshot.forEach((docSnapshot) => {
+        events.push({ id: docSnapshot.id, ...docSnapshot.data() });
+      });
+
+      events.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setAnalyticsEvents(events);
+    } catch (error) {
+      console.error('Error fetching analytics', error);
+      toast.error('Error fetching analytics.');
+    } finally {
+      setLoadingAnalytics(false);
+    }
+  };
+
   useEffect(() => {
     fetchAllBookings();
+    fetchAnalyticsEvents();
   }, []);
 
-  const handleDateChange = async (event) => {
-    const date = event.target.value;
-    setBlockDate(date);
-    setBlockTime('');
-
+  const loadBlockSlots = async (date, duration) => {
     if (!date) {
+      setAvailableSlots([]);
+      return;
+    }
+
+    if (duration === 'day') {
       setAvailableSlots([]);
       return;
     }
 
     setLoadingSlots(true);
     try {
-      const slots = await fetchAvailableSlots(date, 45);
+      const slots = await fetchAvailableSlots(date, duration);
       setAvailableSlots(slots);
     } catch (error) {
       console.error('Error fetching slots:', error);
@@ -66,34 +93,45 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleDateChange = async (event) => {
+    const date = event.target.value;
+    setBlockDate(date);
+    setBlockTime('');
+    await loadBlockSlots(date, blockDuration);
+  };
+
+  const handleBlockDurationChange = async (event) => {
+    const duration = event.target.value;
+    setBlockDuration(duration);
+    setBlockTime('');
+    await loadBlockSlots(blockDate, duration);
+  };
+
   const handleBlockSlot = async () => {
-    if (!blockDate || !blockTime) {
-      toast.error('Please select both date and time.');
+    if (!blockDate || (blockDuration !== 'day' && !blockTime)) {
+      toast.error('Please select date and time.');
       return;
     }
 
     setBlockingSlot(true);
     try {
       await addDoc(collection(db, 'bookings'), {
-        ...buildBookingRecord({
-          program: 'BLOCKED',
-          duration: 45,
+        ...buildBlockedSlotRecord({
           date: blockDate,
           time: blockTime,
-          amount: 0,
-          status: BOOKING_STATUSES.paid,
-          userId: 'admin',
-          userEmail: 'ADMIN (BLOCKED)',
+          duration: blockDuration,
+          reason: blockReason,
         }),
-        isBlocked: true,
       });
 
-      toast.success(`Slot ${blockTime} on ${blockDate} is now closed.`);
+      toast.success(blockDuration === 'day'
+        ? `${blockDate} is now closed for the day.`
+        : `Slot ${blockTime} on ${blockDate} is now closed.`);
       setBlockTime('');
+      setBlockReason('');
       fetchAllBookings();
 
-      const slots = await fetchAvailableSlots(blockDate, 45);
-      setAvailableSlots(slots);
+      await loadBlockSlots(blockDate, blockDuration);
     } catch (error) {
       console.error('Error blocking slot:', error);
       toast.error('Failed to block slot.');
@@ -161,6 +199,16 @@ const AdminDashboard = () => {
     }
     return true;
   });
+
+  const bookingPageViews = analyticsEvents.filter((event) => event.eventName === 'booking_page_view').length;
+  const checkoutStarts = analyticsEvents.filter((event) => event.eventName === 'checkout_started').length;
+  const programClicks = analyticsEvents.filter((event) => event.eventName === 'program_click');
+  const programClickCounts = programClicks.reduce((counts, event) => {
+    const program = event.metadata?.program || 'Unknown';
+    counts[program] = (counts[program] || 0) + 1;
+    return counts;
+  }, {});
+  const topProgram = Object.entries(programClickCounts).sort((a, b) => b[1] - a[1])[0];
 
   return (
     <>
@@ -313,6 +361,52 @@ const AdminDashboard = () => {
               </div>
             </div>
 
+            <div className="admin-side-stack">
+            <div className="admin-card">
+              <h3>Site Analytics</h3>
+              <p style={{ fontSize: '14px', color: '#666', marginBottom: '1.5rem' }}>
+                Tracks lightweight booking interest from visitors. No payment or card data is stored here.
+              </p>
+
+              {loadingAnalytics ? (
+                <div className="text-center p-2">
+                  <Loader size="small" />
+                </div>
+              ) : (
+                <>
+                  <div className="analytics-grid">
+                    <div className="analytics-box">
+                      <strong>{bookingPageViews}</strong>
+                      <span>Booking page views</span>
+                    </div>
+                    <div className="analytics-box">
+                      <strong>{checkoutStarts}</strong>
+                      <span>Checkout starts</span>
+                    </div>
+                    <div className="analytics-box wide">
+                      <strong>{topProgram ? topProgram[0] : '-'}</strong>
+                      <span>Most clicked program</span>
+                    </div>
+                  </div>
+
+                  <div className="program-analytics-list">
+                    {Object.entries(programClickCounts).length > 0 ? (
+                      Object.entries(programClickCounts)
+                        .sort((a, b) => b[1] - a[1])
+                        .map(([program, count]) => (
+                          <div key={program} className="program-analytics-row">
+                            <span>{program}</span>
+                            <strong>{count}</strong>
+                          </div>
+                        ))
+                    ) : (
+                      <p className="muted-small">No program clicks tracked yet.</p>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+
             <div className="admin-card">
               <h3>Manage Availability</h3>
               <p style={{ fontSize: '14px', color: '#666', marginBottom: '1.5rem' }}>
@@ -334,6 +428,24 @@ const AdminDashboard = () => {
                 />
               </div>
 
+              <div className="form-group mb-3">
+                <label
+                  style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}
+                >
+                  Block Type
+                </label>
+                <select
+                  value={blockDuration}
+                  onChange={handleBlockDurationChange}
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+                >
+                  <option value="45">45-minute slot</option>
+                  <option value="90">90-minute slot</option>
+                  <option value="day">Full day</option>
+                </select>
+              </div>
+
+              {blockDuration !== 'day' && (
               <div className="form-group mb-3">
                 <label
                   style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}
@@ -363,15 +475,32 @@ const AdminDashboard = () => {
                   <p style={{ fontSize: '12px', color: '#888' }}>Please select a date first.</p>
                 )}
               </div>
+              )}
+
+              <div className="form-group mb-3">
+                <label
+                  style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}
+                >
+                  Reason
+                </label>
+                <textarea
+                  value={blockReason}
+                  onChange={(event) => setBlockReason(event.target.value)}
+                  placeholder="Optional note, e.g. tournament day or private event"
+                  rows="3"
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', resize: 'vertical' }}
+                />
+              </div>
 
               <button
                 onClick={handleBlockSlot}
-                disabled={blockingSlot || !blockTime}
+                disabled={blockingSlot || !blockDate || (blockDuration !== 'day' && !blockTime)}
                 className="btn-primary full-width mt-3"
                 style={{ background: 'var(--secondary)', color: 'white' }}
               >
-                {blockingSlot ? 'Blocking...' : 'Block Selected Slot'}
+                {blockingSlot ? 'Blocking...' : blockDuration === 'day' ? 'Block Full Day' : 'Block Selected Slot'}
               </button>
+            </div>
             </div>
           </div>
         </div>
