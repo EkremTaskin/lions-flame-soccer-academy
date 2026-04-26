@@ -136,6 +136,8 @@ export const createPaymentLinkBooking = async ({ program, duration, date, time, 
 
   return {
     bookingId: bookingRef.id,
+    program: canonicalProgram,
+    duration: String(durationMinutes),
     url: checkoutUrl.toString(),
   };
 };

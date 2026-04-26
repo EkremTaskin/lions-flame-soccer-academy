@@ -37,7 +37,7 @@ const Navbar = () => {
   const handleLinkClick = (e, targetId) => {
     closeMenu();
     // If we're already on the home page, handle scroll manually
-    if (window.location.pathname === '/' || window.location.pathname === '/lions-flame-soccer-academy/') {
+    if (window.location.pathname === '/') {
       const element = document.getElementById(targetId.replace('#', ''));
       if (element) {
         e.preventDefault();
