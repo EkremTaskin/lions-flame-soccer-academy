@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import Loader from '../components/Loader';
 import { db } from '../firebase';
 import { fetchAvailableSlots } from '../utils/bookingApi';
+import { notifyBookingConfirmed } from '../utils/emailNotifications';
 import { BOOKING_STATUSES, buildBookingRecord, getBookingStatusLabel } from '../../shared/bookingConfig';
 import './AdminDashboard.css';
 
@@ -116,13 +117,22 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleUpdateBookingStatus = async (id, status) => {
+  const handleUpdateBookingStatus = async (booking, status) => {
     try {
-      await updateDoc(doc(db, 'bookings', id), {
+      await updateDoc(doc(db, 'bookings', booking.id), {
         status,
         paymentStatus: status === BOOKING_STATUSES.confirmed ? 'paid' : status,
         updatedAt: new Date().toISOString(),
       });
+
+      if (status === BOOKING_STATUSES.confirmed) {
+        await notifyBookingConfirmed({
+          ...booking,
+          status,
+          paymentStatus: 'paid',
+        });
+      }
+
       toast.success(`Booking marked as ${getBookingStatusLabel(status)}.`);
       fetchAllBookings();
     } catch (error) {
@@ -272,7 +282,7 @@ const AdminDashboard = () => {
                                 {!booking.isBlocked && ![BOOKING_STATUSES.confirmed, BOOKING_STATUSES.paid].includes(booking.status) && (
                                   <button
                                     className="action-confirm"
-                                    onClick={() => handleUpdateBookingStatus(booking.id, BOOKING_STATUSES.confirmed)}
+                                    onClick={() => handleUpdateBookingStatus(booking, BOOKING_STATUSES.confirmed)}
                                   >
                                     Confirm
                                   </button>
@@ -280,7 +290,7 @@ const AdminDashboard = () => {
                                 {!booking.isBlocked && booking.status !== BOOKING_STATUSES.cancelled && (
                                   <button
                                     className="action-cancel"
-                                    onClick={() => handleUpdateBookingStatus(booking.id, BOOKING_STATUSES.cancelled)}
+                                    onClick={() => handleUpdateBookingStatus(booking, BOOKING_STATUSES.cancelled)}
                                   >
                                     Cancel
                                   </button>

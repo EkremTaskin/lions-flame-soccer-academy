@@ -7,6 +7,7 @@ import {
   getAvailableSlots,
   getBookingPrice,
 } from '../../shared/bookingConfig';
+import { notifyBookingCreated } from './emailNotifications';
 
 const PAYMENT_LINKS = {
   'One-on-One': {
@@ -114,7 +115,7 @@ export const createPaymentLinkBooking = async ({ program, duration, date, time, 
     expiresAt,
   });
 
-  const bookingRef = await addDoc(collection(db, 'bookings'), {
+  const bookingPayload = {
     ...bookingRecord,
     customerDetails: {
       playerName: customerDetails?.playerName ?? '',
@@ -125,7 +126,9 @@ export const createPaymentLinkBooking = async ({ program, duration, date, time, 
     },
     paymentProvider: 'stripe_payment_link',
     updatedAt: new Date().toISOString(),
-  });
+  };
+
+  const bookingRef = await addDoc(collection(db, 'bookings'), bookingPayload);
 
   const checkoutUrl = new URL(paymentLink);
   checkoutUrl.searchParams.set('client_reference_id', bookingRef.id);
@@ -133,6 +136,11 @@ export const createPaymentLinkBooking = async ({ program, duration, date, time, 
   if (user.email) {
     checkoutUrl.searchParams.set('prefilled_email', user.email);
   }
+
+  await notifyBookingCreated({
+    id: bookingRef.id,
+    ...bookingPayload,
+  });
 
   return {
     bookingId: bookingRef.id,

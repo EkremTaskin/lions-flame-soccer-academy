@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import { toast } from 'sonner';
 import '../components/Loader.css';
 import './Login.css';
+import { notifyRegistration } from '../utils/emailNotifications';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -35,6 +36,7 @@ const Login = () => {
                     role: 'user',
                     createdAt: new Date().toISOString()
                 });
+                await notifyRegistration({ email: user.email });
                 toast.success('Account created successfully!');
                 navigate('/');
             }
